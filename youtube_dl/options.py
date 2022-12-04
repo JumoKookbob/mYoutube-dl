@@ -123,7 +123,7 @@ def parseOpts(overrideArguments=None): # opts(옵션들)을 분석하는 메소�
     kw = {
         'version': __version__,
         'formatter': fmt,
-        'usage': '%prog [OPTIONS] URL [URL...]',
+        'usage': '%prog [OPTIONS] [URL...]',
         'conflict_handler': 'resolve',
     }
 
@@ -134,107 +134,107 @@ def parseOpts(overrideArguments=None): # opts(옵션들)을 분석하는 메소�
     general.add_option(
         '-h', '--help',
         action='help',
-        help='Print this help text and exit')
+        help='이 도움말 텍스트를 인쇄하고 종료하십시오.')
     general.add_option(
         '--version',
         action='version',
-        help='Print program version and exit')
+        help='프로그램 버전 출력 후 종료')
     general.add_option(
         '-U', '--update',
         action='store_true', dest='update_self',
-        help='Update this program to latest version. Make sure that you have sufficient permissions (run with sudo if needed)')
+        help='이 프로그램을 최신 버전으로 업데이트합니다. 충분한 권한이 있는지 확인하십시오(필요한 경우 sudo와 함께 실행).')
     general.add_option(
         '-i', '--ignore-errors',
         action='store_true', dest='ignoreerrors', default=False,
-        help='Continue on download errors, for example to skip unavailable videos in a playlist')
+        help='다운로드 오류를 계속합니다. 예를 들어 재생 목록에서 사용할 수 없는 비디오를 건너뜁니다.')
     general.add_option(
         '--abort-on-error',
         action='store_false', dest='ignoreerrors',
-        help='Abort downloading of further videos (in the playlist or the command line) if an error occurs')
+        help='오류가 발생할 경우 추가 비디오(재생 목록 또는 명령줄에서) 다운로드를 중단합니다.')
     general.add_option(
         '--dump-user-agent',
         action='store_true', dest='dump_user_agent', default=False,
-        help='Display the current browser identification')
+        help='현재 브라우저 ID 표시')
     general.add_option(
         '--list-extractors',
         action='store_true', dest='list_extractors', default=False,
-        help='List all supported extractors')
+        help='지원되는 모든 추출기 나열')
     general.add_option(
         '--extractor-descriptions',
         action='store_true', dest='list_extractor_descriptions', default=False,
-        help='Output descriptions of all supported extractors')
+        help='지원되는 모든 추출기의 출력 설명')
     general.add_option(
         '--force-generic-extractor',
         action='store_true', dest='force_generic_extractor', default=False,
-        help='Force extraction to use the generic extractor')
+        help='"일반 추출기"를 사용하도록 강제 추출')
     general.add_option(
         '--default-search',
         dest='default_search', metavar='PREFIX',
-        help='Use this prefix for unqualified URLs. For example "gvsearch2:" downloads two videos from google videos for youtube-dl "large apple". Use the value "auto" to let youtube-dl guess ("auto_warning" to emit a warning when guessing). "error" just throws an error. The default value "fixup_error" repairs broken URLs, but emits an error if this is not possible instead of searching.')
+        help ='"정규화되지 않은 URL에 이 접두사를 사용합니다. 예를 들어, "gvsearch2:"는 유튜브-dl "large apple"을 위해 구글 비디오에서 두 개의 비디오를 다운로드합니다. "auto" 값을 사용하여 Youtube에서 추측할 수 있습니다("auto_warning"). "error"는 단지 오류를 던집니다. 기본값 "fixup_error"는 손상된 URL을 복구하지만 검색 대신 이를 수행할 수 없는 경우 오류를 발생시킵니다."')
     general.add_option(
         '--ignore-config',
         action='store_true',
-        help='Do not read configuration files. '
-        'When given in the global configuration file /etc/youtube-dl.conf: '
-        'Do not read the user configuration in ~/.config/youtube-dl/config '
+        help='구성 파일을 읽지 않습니다. '
+        '글로벌 구성 파일 /etc/youtube-dl.conf에 지정된 경우: '
+        '~./config/youtube-dl/config의 사용자 구성을 읽지 마십시오.'
         '(%APPDATA%/youtube-dl/config.txt on Windows)')
     general.add_option(
         '--config-location',
         dest='config_location', metavar='PATH',
-        help='Location of the configuration file; either the path to the config or its containing directory.')
+        help='구성 파일의 위치. 구성에 대한 경로 또는 구성 파일이 포함된 디렉토리')
     general.add_option(
         '--flat-playlist',
         action='store_const', dest='extract_flat', const='in_playlist',
         default=False,
-        help='Do not extract the videos of a playlist, only list them.')
+        help='재생 목록의 비디오를 추출하지 않고 나열만 합니다.')
     general.add_option(
         '--mark-watched',
         action='store_true', dest='mark_watched', default=False,
-        help='Mark videos watched (YouTube only)')
+        help='시청한 동영상 표시 (오직 YouTube에서만)')
     general.add_option(
         '--no-mark-watched',
         action='store_false', dest='mark_watched', default=False,
-        help='Do not mark videos watched (YouTube only)')
+        help='시청한 동영상을 표시하지않음(오직 YouTube에서만)')
     general.add_option(
         '--no-color', '--no-colors',
         action='store_true', dest='no_color',
         default=False,
-        help='Do not emit color codes in output')
+        help='출력에서 색상 코드를 내보내지 않음')
 
-    network = optparse.OptionGroup(parser, 'Network Options') # 네트워크 옵션
+    network = optparse.OptionGroup(parser, 'Network Options')
     network.add_option(
         '--proxy', dest='proxy',
         default=None, metavar='URL',
-        help='Use the specified HTTP/HTTPS/SOCKS proxy. To enable '
-             'SOCKS proxy, specify a proper scheme. For example '
-             'socks5://127.0.0.1:1080/. Pass in an empty string (--proxy "") '
-             'for direct connection')
+        help='지정된 HTTP/HTTPS/SOCKS 프록시를 사용합니다. '
+             'SOKS 프록시를 사용하려면 적절한 구성표를 지정하십시오.'
+             '예를 들어 socks5://127.0.0.1:1080/. 빈 문자열은 지나칩니다 (--proxy "") '
+             '직접 연결하기 위함')
     network.add_option(
         '--socket-timeout',
         dest='socket_timeout', type=float, default=None, metavar='SECONDS',
-        help='Time to wait before giving up, in seconds')
+        help='포기하기 전에 기다리는 시간(초 단위)')
     network.add_option(
         '--source-address',
         metavar='IP', dest='source_address', default=None,
-        help='Client-side IP address to bind to',
+        help='바인딩할 클라이언트 측 IP 주소',
     )
     network.add_option(
         '-4', '--force-ipv4',
         action='store_const', const='0.0.0.0', dest='source_address',
-        help='Make all connections via IPv4',
+        help='IPv4를 통해 모든 연결 만들기',
     )
     network.add_option(
         '-6', '--force-ipv6',
         action='store_const', const='::', dest='source_address',
-        help='Make all connections via IPv6',
+        help='IPv6를 통해 모든 연결 만들기',
     )
 
-    geo = optparse.OptionGroup(parser, 'Geo Restriction') # 지역 제한 옵션
+    geo = optparse.OptionGroup(parser, 'Geo Restriction')
     geo.add_option(
         '--geo-verification-proxy',
         dest='geo_verification_proxy', default=None, metavar='URL',
-        help='Use this proxy to verify the IP address for some geo-restricted sites. '
-        'The default proxy specified by --proxy (or none, if the option is not present) is used for the actual downloading.')
+        help='이 프록시를 사용하여 일부 지역 제한 사이트의 IP 주소를 확인합니다. '
+        '--proxy로 지정된 기본 프록시(또는 옵션이 존재하지 않는 경우)가 실제 다운로드에 사용됩니다.')    
     geo.add_option(
         '--cn-verification-proxy',
         dest='cn_verification_proxy', default=None, metavar='URL',
@@ -242,172 +242,172 @@ def parseOpts(overrideArguments=None): # opts(옵션들)을 분석하는 메소�
     geo.add_option(
         '--geo-bypass',
         action='store_true', dest='geo_bypass', default=True,
-        help='Bypass geographic restriction via faking X-Forwarded-For HTTP header')
+        help='forwarded-HTTP 헤더를 통해 지리적 제한을 무시합니다.')
     geo.add_option(
         '--no-geo-bypass',
         action='store_false', dest='geo_bypass', default=True,
-        help='Do not bypass geographic restriction via faking X-Forwarded-For HTTP header')
+        help='forwarded-HTTP 헤더를 통해 지리적 제한을 무시하지않습니다.')
     geo.add_option(
         '--geo-bypass-country', metavar='CODE',
         dest='geo_bypass_country', default=None,
-        help='Force bypass geographic restriction with explicitly provided two-letter ISO 3166-2 country code')
+        help='명시적으로 제공된 ISO 3166-2 국가 코드로 지리적 제한 적용')
     geo.add_option(
         '--geo-bypass-ip-block', metavar='IP_BLOCK',
         dest='geo_bypass_ip_block', default=None,
-        help='Force bypass geographic restriction with explicitly provided IP block in CIDR notation')
-
-    selection = optparse.OptionGroup(parser, 'Video Selection') # 비디오 선택 옵션
+        help='CIDR 표기법으로 명시적으로 제공된 IP 블록으로 지리적 제한 적용')
+    selection = optparse.OptionGroup(parser, 'Video Selection')
     selection.add_option(
         '--playlist-start',
         dest='playliststart', metavar='NUMBER', default=1, type=int,
-        help='Playlist video to start at (default is %default)')
+        help='시작할 재생 목록 비디오(기본값: %default)')
     selection.add_option(
         '--playlist-end',
         dest='playlistend', metavar='NUMBER', default=None, type=int,
-        help='Playlist video to end at (default is last)')
+        help='종료할 재생 목록 비디오(기본값은 마지막)')
     selection.add_option(
         '--playlist-items',
         dest='playlist_items', metavar='ITEM_SPEC', default=None,
-        help='Playlist video items to download. Specify indices of the videos in the playlist separated by commas like: "--playlist-items 1,2,5,8" if you want to download videos indexed 1, 2, 5, 8 in the playlist. You can specify range: "--playlist-items 1-3,7,10-13", it will download the videos at index 1, 2, 3, 7, 10, 11, 12 and 13.')
+        help='다운로드할 비디오 항목을 나열합니다. 재생 목록에서 색인화된 비디오 1, 2, 5, 8을 다운로드하려면 "--playlist-items 1, 2, 5, 8"과 같이 쉼표로 구분하여 재생 목록에 있는 비디오의 색인을 지정합니다. "--playlist-items 1-3,7,10-13" 범위를 지정할 수 있습니다. 그러면 인덱스 1,2,3,7,10,11,12,13에서 비디오가 다운로드됩니다."')
     selection.add_option(
         '--match-title',
         dest='matchtitle', metavar='REGEX',
-        help='Download only matching titles (case-insensitive regex or alphanumeric sub-string)')
+        help='일치하는 제목만 다운로드(대소문자를 구분하지 않는 정규식 또는 영숫자 하위 문자열)')
     selection.add_option(
         '--reject-title',
         dest='rejecttitle', metavar='REGEX',
-        help='Skip download for matching titles (case-insensitive regex or alphanumeric sub-string)')
+        help='대소문자를 구분하지 않는 정규식 또는 영숫자 하위 문자열) 일치하는 제목에 대한 다운로드 건너뛰기')
     selection.add_option(
         '--max-downloads',
         dest='max_downloads', metavar='NUMBER', type=int, default=None,
-        help='Abort after downloading NUMBER files')
+        help='NUMBER 파일 다운로드 후 중단')
     selection.add_option(
         '--min-filesize',
         metavar='SIZE', dest='min_filesize', default=None,
-        help='Do not download any videos smaller than SIZE (e.g. 50k or 44.6m)')
+        help='SIZE(예: 50k 또는 44.6m)보다 작은 비디오는 다운로드하지 않음)')
     selection.add_option(
         '--max-filesize',
         metavar='SIZE', dest='max_filesize', default=None,
-        help='Do not download any videos larger than SIZE (e.g. 50k or 44.6m)')
+        help='SIZE(예: 50k 또는 44.6m)보다 큰 비디오는 다운로드하지 마십시오.')
     selection.add_option(
         '--date',
         metavar='DATE', dest='date', default=None,
-        help='Download only videos uploaded in this date')
+        help='이 날짜에 업로드된 동영상만 다운로드')
     selection.add_option(
         '--datebefore',
         metavar='DATE', dest='datebefore', default=None,
-        help='Download only videos uploaded on or before this date (i.e. inclusive)')
+        help='이 날짜 이전에 업로드된 동영상만 다운로드(즉, 포함)')
     selection.add_option(
         '--dateafter',
         metavar='DATE', dest='dateafter', default=None,
-        help='Download only videos uploaded on or after this date (i.e. inclusive)')
+        help='이 날짜 이후에 업로드된 동영상만 다운로드(즉, 포함)')
     selection.add_option(
         '--min-views',
         metavar='COUNT', dest='min_views', default=None, type=int,
-        help='Do not download any videos with less than COUNT views')
+        help='COUNT 보기보다 작은 동영상은 다운로드하지 마십시오.')
     selection.add_option(
         '--max-views',
         metavar='COUNT', dest='max_views', default=None, type=int,
-        help='Do not download any videos with more than COUNT views')
+        help='COUNT 뷰 이상의 비디오를 다운로드하지 마십시오.')
     selection.add_option(
         '--match-filter',
         metavar='FILTER', dest='match_filter', default=None,
         help=(
-            'Generic video filter. '
-            'Specify any key (see the "OUTPUT TEMPLATE" for a list of available keys) to '
-            'match if the key is present, '
-            '!key to check if the key is not present, '
-            'key > NUMBER (like "comment_count > 12", also works with '
-            '>=, <, <=, !=, =) to compare against a number, '
-            'key = \'LITERAL\' (like "uploader = \'Mike Smith\'", also works with !=) '
-            'to match against a string literal '
-            'and & to require multiple matches. '
-            'Values which are not known are excluded unless you '
-            'put a question mark (?) after the operator. '
-            'For example, to only match videos that have been liked more than '
-            '100 times and disliked less than 50 times (or the dislike '
-            'functionality is not available at the given service), but who '
-            'also have a description, use --match-filter '
-            '"like_count > 100 & dislike_count <? 50 & description" .'
+            '일반 비디오 필터. '
+            'key를 지정하십시오(사용 가능한 키 목록은 "OUTPUT TEMPLE" 참조).'
+            'key가 있는지 확인하십시오.'
+            '!key가 존재하지 않는지 확인하기 위한 key'
+            ' key > NUMBER("comment_count > 12"와 마찬가지로) 함께 작동합니다.'
+            '>=, <, <=, !=, =) 숫자와 비교하기 위해, '
+            'key = \'LITERAL\' (예: "messager = \'Mike Smith\")도 !=와 함께 작동합니다.)'
+            '문자열과 일치시키다'
+            '여러 개의 일치 항목이 필요합니다. '
+            '알 수 없는 값은 다음을 제외한다.'
+            '연산자 뒤에 물음표(?)를 붙입니다. '
+            '예를 들어, '
+            '보다 더 좋아하는 비디오만 일치시키는 것'
+            '100번 이상 미움을 50번 미만(또는 미움직임'
+            '지정된 서비스에서는 기능을 사용할 수 없습니다.'
+            '또한 설명이 있습니다. --match-filter를 사용하십시오.'
+            '"like_count > 100 & havior_count <? 50 & description" .'
         ))
     selection.add_option(
         '--no-playlist',
         action='store_true', dest='noplaylist', default=False,
-        help='Download only the video, if the URL refers to a video and a playlist.')
+        help='URL이 비디오 및 재생 목록을 참조하는 경우 재생 목록을 다운로드합니다.')
     selection.add_option(
         '--yes-playlist',
         action='store_false', dest='noplaylist', default=False,
-        help='Download the playlist, if the URL refers to a video and a playlist.')
+        help='URL이 비디오 및 재생 목록을 참조하는 경우 재생 목록을 다운로드합니다.') 
     selection.add_option(
         '--age-limit',
         metavar='YEARS', dest='age_limit', default=None, type=int,
-        help='Download only videos suitable for the given age')
+        help='특정 연령에 적합한 비디오만 다운로드')
     selection.add_option(
         '--download-archive', metavar='FILE',
         dest='download_archive',
-        help='Download only videos not listed in the archive file. Record the IDs of all downloaded videos in it.')
+        help='보관 파일에 나열되지 않은 비디오만 다운로드합니다. 다운로드한 모든 동영상의 ID를 기록합니다.')    
     selection.add_option(
         '--include-ads',
         dest='include_ads', action='store_true',
-        help='Download advertisements as well (experimental)')
+        help='광고도 다운로드 합니다(실험적)')
 
-    authentication = optparse.OptionGroup(parser, 'Authentication Options') # 유저 입증 옵션
+    authentication = optparse.OptionGroup(parser, 'Authentication Options')
     authentication.add_option(
         '-u', '--username',
         dest='username', metavar='USERNAME',
-        help='Login with this account ID')
+        help='이 계정 ID로 로그인')
     authentication.add_option(
         '-p', '--password',
         dest='password', metavar='PASSWORD',
-        help='Account password. If this option is left out, youtube-dl will ask interactively.')
+        help='계정 암호. 이 옵션이 빠지면 youtube-dl이 대화형으로 질문할 것이다.')
     authentication.add_option(
         '-2', '--twofactor',
         dest='twofactor', metavar='TWOFACTOR',
-        help='Two-factor authentication code')
+        help='이중인증코드')
     authentication.add_option(
         '-n', '--netrc',
         action='store_true', dest='usenetrc', default=False,
-        help='Use .netrc authentication data')
+        help='.netrc 인증 데이터 사용')
     authentication.add_option(
         '--video-password',
         dest='videopassword', metavar='PASSWORD',
-        help='Video password (vimeo, youku)')
+        help='비디오 암호(vimeo, youku)')
 
-    adobe_pass = optparse.OptionGroup(parser, 'Adobe Pass Options') # swf 관련 옵션
+    adobe_pass = optparse.OptionGroup(parser, 'Adobe Pass Options')
     adobe_pass.add_option(
         '--ap-mso',
         dest='ap_mso', metavar='MSO',
-        help='Adobe Pass multiple-system operator (TV provider) identifier, use --ap-list-mso for a list of available MSOs')
+        help='Adobe Pass 다중 시스템 운영자(TV 제공자) 식별자, 사용 가능한 MSO 목록에 --ap-list-mso를 사용하십시오.')    
     adobe_pass.add_option(
         '--ap-username',
         dest='ap_username', metavar='USERNAME',
-        help='Multiple-system operator account login')
+        help='다중 시스템 운영자 계정 로그인')
     adobe_pass.add_option(
         '--ap-password',
         dest='ap_password', metavar='PASSWORD',
-        help='Multiple-system operator account password. If this option is left out, youtube-dl will ask interactively.')
+        help='다중 시스템 운영자 계정 암호입니다. 이 옵션이 빠지면 youtube-dl이 대화형으로 질문할 것이다.')
     adobe_pass.add_option(
         '--ap-list-mso',
         action='store_true', dest='ap_list_mso', default=False,
-        help='List all supported multiple-system operators')
+        help='지원되는 모든 다중 시스템 연산자 나열')
 
-    video_format = optparse.OptionGroup(parser, 'Video Format Options') # 비디오 형식 옵션
+    video_format = optparse.OptionGroup(parser, 'Video Format Options')
     video_format.add_option(
         '-f', '--format',
         action='store', dest='format', metavar='FORMAT', default=None,
-        help='Video format code, see the "FORMAT SELECTION" for all the info')
+        help='비디오 형식 코드, 모든 정보는 "FORMAT SELECTION"을 참조하십시오.')
     video_format.add_option(
         '--all-formats',
         action='store_const', dest='format', const='all',
-        help='Download all available video formats')
+        help='사용 가능한 모든 비디오 형식 다운로드')
     video_format.add_option(
         '--prefer-free-formats',
         action='store_true', dest='prefer_free_formats', default=False,
-        help='Prefer free video formats unless a specific one is requested')
+        help='특정 비디오 형식을 요청하지 않는 한 무료 비디오 형식 선호')
     video_format.add_option(
         '-F', '--list-formats',
         action='store_true', dest='listformats',
-        help='List all available formats of requested videos')
+        help='요청된 비디오의 모든 형식 나열')
     video_format.add_option(
         '--youtube-include-dash-manifest',
         action='store_true', dest='youtube_include_dash_manifest', default=True,
@@ -415,80 +415,80 @@ def parseOpts(overrideArguments=None): # opts(옵션들)을 분석하는 메소�
     video_format.add_option(
         '--youtube-skip-dash-manifest',
         action='store_false', dest='youtube_include_dash_manifest',
-        help='Do not download the DASH manifests and related data on YouTube videos')
+        help='YouTube 동영상에서 DASH 매니페스트 및 관련 데이터를 다운로드하지 마십시오.')
     video_format.add_option(
         '--merge-output-format',
         action='store', dest='merge_output_format', metavar='FORMAT', default=None,
         help=(
-            'If a merge is required (e.g. bestvideo+bestaudio), '
-            'output to given container format. One of mkv, mp4, ogg, webm, flv. '
-            'Ignored if no merge is required'))
+            '병합이 필요한 경우(예: 최상의 비디오 + 최상의 오디오),'
+            '지정된 컨테이너 형식으로 출력합니다. mkv, mp4, ogg, webm, flv 중 하나.'
+            '병합이 필요 없는 경우 무시됨'))
 
-    subtitles = optparse.OptionGroup(parser, 'Subtitle Options') # 자막 옵션
+    subtitles = optparse.OptionGroup(parser, 'Subtitle Options')
     subtitles.add_option(
         '--write-sub', '--write-srt',
         action='store_true', dest='writesubtitles', default=False,
-        help='Write subtitle file')
+        help='부제 파일 쓰기')
     subtitles.add_option(
         '--write-auto-sub', '--write-automatic-sub',
         action='store_true', dest='writeautomaticsub', default=False,
-        help='Write automatically generated subtitle file (YouTube only)')
+        help='자동 생성된 자막 파일 작성(YouTube 전용)')
     subtitles.add_option(
         '--all-subs',
         action='store_true', dest='allsubtitles', default=False,
-        help='Download all the available subtitles of the video')
+        help='비디오의 사용 가능한 모든 자막을 다운로드하십시오.')
     subtitles.add_option(
         '--list-subs',
         action='store_true', dest='listsubtitles', default=False,
-        help='List all available subtitles for the video')
+        help='비디오에 사용할 수 있는 모든 자막 나열')
     subtitles.add_option(
         '--sub-format',
         action='store', dest='subtitlesformat', metavar='FORMAT', default='best',
-        help='Subtitle format, accepts formats preference, for example: "srt" or "ass/srt/best"')
+        help='부제 형식: "srt" 또는 "ass/srt/best"와 같은 형식 기본 설정을 사용합니다.')
     subtitles.add_option(
         '--sub-lang', '--sub-langs', '--srt-lang',
         action='callback', dest='subtitleslangs', metavar='LANGS', type='str',
         default=[], callback=_comma_separated_values_options_callback,
-        help='Languages of the subtitles to download (optional) separated by commas, use --list-subs for available language tags')
+        help='다운로드할 자막의 언어(선택사항), 사용 가능한 언어 태그에는 --list-subs를 사용합니다.')
 
-    downloader = optparse.OptionGroup(parser, 'Download Options') # 다운로드 옵션
+    downloader = optparse.OptionGroup(parser, 'Download Options')
     downloader.add_option(
         '-r', '--limit-rate', '--rate-limit',
         dest='ratelimit', metavar='RATE',
-        help='Maximum download rate in bytes per second (e.g. 50K or 4.2M)')
+        help='최대 다운로드 속도(초당 바이트 수)(예: 50K 또는 4).2M)')
     downloader.add_option(
         '-R', '--retries',
         dest='retries', metavar='RETRIES', default=10,
-        help='Number of retries (default is %default), or "infinite".')
+        help='재시도 횟수(기본값은 %default) 또는 "무한"입니다.')
     downloader.add_option(
         '--fragment-retries',
         dest='fragment_retries', metavar='RETRIES', default=10,
-        help='Number of retries for a fragment (default is %default), or "infinite" (DASH, hlsnative and ISM)')
+        help='프래그먼트에 대한 재시도 횟수(기본값: %default) 또는 "재시도 횟수"(DASH, hlsnative 및 ISM')
     downloader.add_option(
         '--skip-unavailable-fragments',
         action='store_true', dest='skip_unavailable_fragments', default=True,
-        help='Skip unavailable fragments (DASH, hlsnative and ISM)')
+        help='사용할 수 없는 조각(DASH, hlsnative 및 ISM) 건너뛰기')
     downloader.add_option(
         '--abort-on-unavailable-fragment',
         action='store_false', dest='skip_unavailable_fragments',
-        help='Abort downloading when some fragment is not available')
+        help='일부 조각을 사용할 수 없는 경우 다운로드를 중단합니다.')
     downloader.add_option(
         '--keep-fragments',
         action='store_true', dest='keep_fragments', default=False,
-        help='Keep downloaded fragments on disk after downloading is finished; fragments are erased by default')
+        help='다운로드가 완료된 후에도 디스크에 다운로드된 조각을 유지합니다. 조각은 기본적으로 지워집니다.')
     downloader.add_option(
         '--buffer-size',
         dest='buffersize', metavar='SIZE', default='1024',
-        help='Size of download buffer (e.g. 1024 or 16K) (default is %default)')
+        help='다운로드 버퍼 크기(예: 1024 또는 16K)(기본값은 %default)')
     downloader.add_option(
         '--no-resize-buffer',
         action='store_true', dest='noresizebuffer', default=False,
-        help='Do not automatically adjust the buffer size. By default, the buffer size is automatically resized from an initial value of SIZE.')
+        help='버퍼 크기를 자동으로 조정하지 마십시오. 기본적으로 버퍼 크기는 초기 값 SIZE에서 자동으로 크기가 조정됩니다.')
     downloader.add_option(
         '--http-chunk-size',
         dest='http_chunk_size', metavar='SIZE', default=None,
-        help='Size of a chunk for chunk-based HTTP downloading (e.g. 10485760 or 10M) (default is disabled). '
-             'May be useful for bypassing bandwidth throttling imposed by a webserver (experimental)')
+        help='청크 기반 HTTP 다운로드를 위한 청크 크기(예: 10485760 또는 10M)(기본값은 비활성화됨). '
+             '웹 서버에 의해 부과되는 대역폭 조절을 우회하는 데 유용할 수 있음(실험적)')
     downloader.add_option(
         '--test',
         action='store_true', dest='test', default=False,
@@ -496,171 +496,170 @@ def parseOpts(overrideArguments=None): # opts(옵션들)을 분석하는 메소�
     downloader.add_option(
         '--playlist-reverse',
         action='store_true',
-        help='Download playlist videos in reverse order')
+        help='재생 목록 비디오를 역순으로 다운로드')
     downloader.add_option(
         '--playlist-random',
         action='store_true',
-        help='Download playlist videos in random order')
+        help='재생 목록 비디오를 임의 순서로 다운로드')
     downloader.add_option(
         '--xattr-set-filesize',
         dest='xattr_set_filesize', action='store_true',
-        help='Set file xattribute ytdl.filesize with expected file size')
+        help='파일 x 속성 ytdl을 설정합니다.예상 파일 크기의 파일 크기')
     downloader.add_option(
         '--hls-prefer-native',
         dest='hls_prefer_native', action='store_true', default=None,
-        help='Use the native HLS downloader instead of ffmpeg')
+        help='fmpeg 대신 네이티브 HLS 다운로더 사용')
     downloader.add_option(
         '--hls-prefer-ffmpeg',
         dest='hls_prefer_native', action='store_false', default=None,
-        help='Use ffmpeg instead of the native HLS downloader')
+        help='네이티브 HLS 다운로더 대신 ffmpeg 사용')
     downloader.add_option(
         '--hls-use-mpegts',
         dest='hls_use_mpegts', action='store_true',
-        help='Use the mpegts container for HLS videos, allowing to play the '
-             'video while downloading (some players may not be able to play it)')
+        help='HLS 비디오에 megts 컨테이너 사용, 재생 허용'
+             '다운로드하는 동안 비디오(일부 플레이어는 재생할 수 없을 수 있음)')
     downloader.add_option(
         '--external-downloader',
         dest='external_downloader', metavar='COMMAND',
-        help='Use the specified external downloader. '
-             'Currently supports %s' % ','.join(list_external_downloaders()))
+        help='지정된 외부 다운로드기를 사용합니다. '
+             '현재 %s을(를) 지원합니다.' % ','.join(list_external_downloaders()))
     downloader.add_option(
         '--external-downloader-args',
         dest='external_downloader_args', metavar='ARGS',
-        help='Give these arguments to the external downloader')
+        help='외부 다운로드자에게 다음과 같은 주장을 전달합니다.')
 
-    workarounds = optparse.OptionGroup(parser, 'Workarounds') # 문제 발생 시 해결 방법 옵션
+    workarounds = optparse.OptionGroup(parser, 'Workarounds')
     workarounds.add_option(
         '--encoding',
         dest='encoding', metavar='ENCODING',
-        help='Force the specified encoding (experimental)')
+        help='지정된 인코딩 강제 적용(실험)')
     workarounds.add_option(
         '--no-check-certificate',
         action='store_true', dest='no_check_certificate', default=False,
-        help='Suppress HTTPS certificate validation')
+        help='HTTPS 인증서 유효성 검사 억제')
     workarounds.add_option(
         '--prefer-insecure',
         '--prefer-unsecure', action='store_true', dest='prefer_insecure',
-        help='Use an unencrypted connection to retrieve information about the video. (Currently supported only for YouTube)')
+        help='암호화되지 않은 연결을 사용하여 동영상에 대한 정보를 검색합니다. (현재 YouTube에서만 지원됨)')
     workarounds.add_option(
         '--user-agent',
         metavar='UA', dest='user_agent',
-        help='Specify a custom user agent')
+        help='사용자 지정 사용자 에이전트 지정')
     workarounds.add_option(
         '--referer',
         metavar='URL', dest='referer', default=None,
-        help='Specify a custom referer, use if the video access is restricted to one domain',
+        help='사용자 지정 참조인을 지정합니다. 비디오 액세스가 하나의 도메인으로 제한된 경우 사용합니다.',
     )
     workarounds.add_option(
         '--add-header',
         metavar='FIELD:VALUE', dest='headers', action='append',
-        help='Specify a custom HTTP header and its value, separated by a colon \':\'. You can use this option multiple times',
+        help='사용자 지정 HTTP 헤더와 해당 값을 콜론 \':\'으로 구분하여 지정합니다. 이 옵션을 여러 번 사용할 수 있습니다.',
     )
     workarounds.add_option(
         '--bidi-workaround',
         dest='bidi_workaround', action='store_true',
-        help='Work around terminals that lack bidirectional text support. Requires bidiv or fribidi executable in PATH')
+        help='양방향 텍스트 지원이 없는 단말기를 해결합니다. PATH에서 bidiv 또는 fribidi 실행 파일 필요')
     workarounds.add_option(
         '--sleep-interval', '--min-sleep-interval', metavar='SECONDS',
         dest='sleep_interval', type=float,
         help=(
-            'Number of seconds to sleep before each download when used alone '
-            'or a lower bound of a range for randomized sleep before each download '
-            '(minimum possible number of seconds to sleep) when used along with '
-            '--max-sleep-interval.'))
+            '단독으로 사용할 때 각 다운로드 전에 절전 모드로 전환하는 시간(초)'
+            '또는 각 다운로드 전 무작위 절전 범위의 하한'
+            '와 함께 사용할 경우 (최소 절전 가능 시간(초))'
+            '최대 수면 시간'))
     workarounds.add_option(
         '--max-sleep-interval', metavar='SECONDS',
         dest='max_sleep_interval', type=float,
         help=(
-            'Upper bound of a range for randomized sleep before each download '
-            '(maximum possible number of seconds to sleep). Must only be used '
-            'along with --min-sleep-interval.'))
+            '각 다운로드 전 무작위 절전 범위의 상한'
+            '(최대 절전 시간(초)입니다. 만 사용해야 합니다.'
+            '최소한의 수면 시간과 함께.'))
 
-    verbosity = optparse.OptionGroup(parser, 'Verbosity / Simulation Options') # 로깅 관련 or 시뮬 옵션
+    verbosity = optparse.OptionGroup(parser, 'Verbosity / Simulation Options')
     verbosity.add_option(
         '-q', '--quiet',
         action='store_true', dest='quiet', default=False,
-        help='Activate quiet mode')
+        help='저소음 모드 활성화')
     verbosity.add_option(
         '--no-warnings',
         dest='no_warnings', action='store_true', default=False,
-        help='Ignore warnings')
+        help='경고를 무시하기')
     verbosity.add_option(
         '-s', '--simulate',
         action='store_true', dest='simulate', default=False,
-        help='Do not download the video and do not write anything to disk')
+        help='비디오를 다운로드하지 않고 디스크에 아무것도 쓰지 않습니다.')
     verbosity.add_option(
         '--skip-download',
         action='store_true', dest='skip_download', default=False,
-        help='Do not download the video')
+        help='비디오 다운로드 안 함')
     verbosity.add_option(
         '-g', '--get-url',
         action='store_true', dest='geturl', default=False,
-        help='Simulate, quiet but print URL')
+        help='시뮬레이션, 조용하지만 URL 출력')
     verbosity.add_option(
         '-e', '--get-title',
         action='store_true', dest='gettitle', default=False,
-        help='Simulate, quiet but print title')
+        help='시뮬레이션, 조용하지만 제목 출력')
     verbosity.add_option(
         '--get-id',
         action='store_true', dest='getid', default=False,
-        help='Simulate, quiet but print id')
+        help='시뮬레이션, 조용하지만 id 출력')
     verbosity.add_option(
         '--get-thumbnail',
         action='store_true', dest='getthumbnail', default=False,
-        help='Simulate, quiet but print thumbnail URL')
+        help='시뮬레이션, 조용하지만 썸네일 URL 출력')
     verbosity.add_option(
         '--get-description',
         action='store_true', dest='getdescription', default=False,
-        help='Simulate, quiet but print video description')
+        help='시뮬레이션, 조용하지만 영상 설명 출력')
     verbosity.add_option(
         '--get-duration',
         action='store_true', dest='getduration', default=False,
-        help='Simulate, quiet but print video length')
+        help='시뮬레이션, 조용하지만 영상 길이 출력')
     verbosity.add_option(
         '--get-filename',
         action='store_true', dest='getfilename', default=False,
-        help='Simulate, quiet but print output filename')
+        help='시뮬레이션, 조용하지만 파일 이름 출력')
     verbosity.add_option(
         '--get-format',
         action='store_true', dest='getformat', default=False,
-        help='Simulate, quiet but print output format')
+        help='시뮬레이션, 조용하지만 포맷 출력')
     verbosity.add_option(
         '-j', '--dump-json',
         action='store_true', dest='dumpjson', default=False,
-        help='Simulate, quiet but print JSON information. See the "OUTPUT TEMPLATE" for a description of available keys.')
+        help='조용하지만 JSON 정보를 인쇄합니다. 사용 가능한 키에 대한 설명은 "OUTPUT TEMPLE"을 참조하십시오.')
     verbosity.add_option(
         '-J', '--dump-single-json',
         action='store_true', dest='dump_single_json', default=False,
-        help='Simulate, quiet but print JSON information for each command-line argument. If the URL refers to a playlist, dump the whole playlist information in a single line.')
+        help='각 명령줄 인수에 대한 JSON 정보를 시뮬레이션하고 조용하지만 인쇄합니다. URL이 재생 목록을 참조하는 경우 전체 재생 목록 정보를 한 줄로 덤프합니다.')    
     verbosity.add_option(
         '--print-json',
         action='store_true', dest='print_json', default=False,
-        help='Be quiet and print the video information as JSON (video is still being downloaded).',
-    )
+        help='조용히 하고 JSON으로 비디오 정보를 인쇄하십시오(비디오가 다운로드 중임).',    )
     verbosity.add_option(
         '--newline',
         action='store_true', dest='progress_with_newline', default=False,
-        help='Output progress bar as new lines')
+        help='진행 표시줄을 새 줄로 출력')
     verbosity.add_option(
         '--no-progress',
         action='store_true', dest='noprogress', default=False,
-        help='Do not print progress bar')
+        help='진행 표시줄을 인쇄하지 않음')
     verbosity.add_option(
         '--console-title',
         action='store_true', dest='consoletitle', default=False,
-        help='Display progress in console titlebar')
+        help='콘솔 제목 표시줄에 진행률 표시')
     verbosity.add_option(
         '-v', '--verbose',
         action='store_true', dest='verbose', default=False,
-        help='Print various debugging information')
+        help='다양한 디버깅 정보 인쇄')
     verbosity.add_option(
         '--dump-pages', '--dump-intermediate-pages',
         action='store_true', dest='dump_intermediate_pages', default=False,
-        help='Print downloaded pages encoded using base64 to debug problems (very verbose)')
+        help='base64를 사용하여 인코딩된 다운로드된 페이지를 인쇄하여 문제를 디버깅합니다(매우 상세).')
     verbosity.add_option(
         '--write-pages',
         action='store_true', dest='write_pages', default=False,
-        help='Write downloaded intermediary pages to files in the current directory to debug problems')
+        help='문제를 디버깅하기 위해 다운로드한 중간 페이지를 현재 디렉터리의 파일에 기록')
     verbosity.add_option(
         '--youtube-print-sig-code',
         action='store_true', dest='youtube_print_sig_code', default=False,
@@ -668,33 +667,33 @@ def parseOpts(overrideArguments=None): # opts(옵션들)을 분석하는 메소�
     verbosity.add_option(
         '--print-traffic', '--dump-headers',
         dest='debug_printtraffic', action='store_true', default=False,
-        help='Display sent and read HTTP traffic')
+        help='전송된 HTTP 트래픽 표시 및 읽기')
     verbosity.add_option(
         '-C', '--call-home',
         dest='call_home', action='store_true', default=False,
-        help='Contact the youtube-dl server for debugging')
+        help='유튜브-dl 서버에 문의하여 디버깅하십시오.')
     verbosity.add_option(
         '--no-call-home',
         dest='call_home', action='store_false', default=False,
-        help='Do NOT contact the youtube-dl server for debugging')
+        help='debugging을 위해 youtube-dl 서버에 접속하지 마십시오.')
 
-    filesystem = optparse.OptionGroup(parser, 'Filesystem Options') # 파일 시스템 옵션
+    filesystem = optparse.OptionGroup(parser, 'Filesystem Options')
     filesystem.add_option(
         '-a', '--batch-file',
         dest='batchfile', metavar='FILE',
-        help="File containing URLs to download ('-' for stdin), one URL per line. "
-             "Lines starting with '#', ';' or ']' are considered as comments and ignored.")
+        help="다운로드할 URL('-' for stdin)을 포함하는 파일로, 한 줄에 하나의 URL을 입력합니다. "
+             "'#', ';' 또는 ']'로 시작하는 줄은 주석으로 간주되어 무시됩니다.")
     filesystem.add_option(
         '--id', default=False,
-        action='store_true', dest='useid', help='Use only video ID in file name')
+        action='store_true', dest='useid', help='파일 이름에 비디오 ID만 사용')
     filesystem.add_option(
         '-o', '--output',
         dest='outtmpl', metavar='TEMPLATE',
-        help=('Output filename template, see the "OUTPUT TEMPLATE" for all the info'))
+        help=('출력 파일 이름 템플릿, 모든 정보는 "OUTPUT TEMPLE"을 참조하십시오.'))
     filesystem.add_option(
         '--output-na-placeholder',
         dest='outtmpl_na_placeholder', metavar='PLACEHOLDER', default='NA',
-        help=('Placeholder value for unavailable meta fields in output filename template (default is "%default")'))
+        help='출력 파일 이름 템플릿에서 사용할 수 없는 메타 필드에 대한 자리 표시자 값(기본값: "%default"')    
     filesystem.add_option(
         '--autonumber-size',
         dest='autonumber_size', metavar='NUMBER', type=int,
@@ -702,11 +701,11 @@ def parseOpts(overrideArguments=None): # opts(옵션들)을 분석하는 메소�
     filesystem.add_option(
         '--autonumber-start',
         dest='autonumber_start', metavar='NUMBER', default=1, type=int,
-        help='Specify the start value for %(autonumber)s (default is %default)')
+        help='%(자동 번호)의 시작 값을 지정합니다(기본값은 %default)')
     filesystem.add_option(
         '--restrict-filenames',
         action='store_true', dest='restrictfilenames', default=False,
-        help='Restrict filenames to only ASCII characters, and avoid "&" and spaces in filenames')
+        help='파일 이름을 ASCII 문자로만 제한하고 파일 이름의 "&" 및 공백은 사용하지 마십시오.')
     filesystem.add_option(
         '-A', '--auto-number',
         action='store_true', dest='autonumber', default=False,
@@ -722,148 +721,147 @@ def parseOpts(overrideArguments=None): # opts(옵션들)을 분석하는 메소�
     filesystem.add_option(
         '-w', '--no-overwrites',
         action='store_true', dest='nooverwrites', default=False,
-        help='Do not overwrite files')
+        help='파일 덮어쓰기 안 함')
     filesystem.add_option(
         '-c', '--continue',
         action='store_true', dest='continue_dl', default=True,
-        help='Force resume of partially downloaded files. By default, youtube-dl will resume downloads if possible.')
+        help='부분적으로 다운로드된 파일을 강제로 다시 시작합니다. 기본적으로 유튜브-dl은 가능하다면 다운로드를 재개할 것이다.')
     filesystem.add_option(
         '--no-continue',
         action='store_false', dest='continue_dl',
-        help='Do not resume partially downloaded files (restart from beginning)')
+        help='부분적으로 다운로드된 파일을 다시 시작하지 않음(처음부터 다시 시작됨)')
     filesystem.add_option(
         '--no-part',
         action='store_true', dest='nopart', default=False,
-        help='Do not use .part files - write directly into output file')
+        help='.part 파일 사용 안 함 - 출력 파일에 직접 쓰기')
     filesystem.add_option(
         '--no-mtime',
         action='store_false', dest='updatetime', default=True,
-        help='Do not use the Last-modified header to set the file modification time')
+        help='마지막으로 수정한 헤더를 사용하여 파일 수정 시간을 설정하지 마십시오.')
     filesystem.add_option(
         '--write-description',
         action='store_true', dest='writedescription', default=False,
-        help='Write video description to a .description file')
+        help='.description 파일에 비디오 설명 쓰기')
     filesystem.add_option(
         '--write-info-json',
         action='store_true', dest='writeinfojson', default=False,
-        help='Write video metadata to a .info.json file')
+        help='.info.json 파일에 비디오 메타데이터 쓰기')
     filesystem.add_option(
         '--write-annotations',
         action='store_true', dest='writeannotations', default=False,
-        help='Write video annotations to a .annotations.xml file')
+        help='비디오 주석을 .documentations.xml 파일에 기록')
     filesystem.add_option(
         '--load-info-json', '--load-info',
         dest='load_info_filename', metavar='FILE',
-        help='JSON file containing the video information (created with the "--write-info-json" option)')
+        help='JSON 파일("--write-info-json" 옵션으로 생성)')
     filesystem.add_option(
         '--cookies',
         dest='cookiefile', metavar='FILE',
-        help='File to read cookies from and dump cookie jar in')
+        help='쿠키를 읽고 쿠키 병을 덤프할 파일')
     filesystem.add_option(
         '--cache-dir', dest='cachedir', default=None, metavar='DIR',
-        help='Location in the filesystem where youtube-dl can store some downloaded information permanently. By default $XDG_CACHE_HOME/youtube-dl or ~/.cache/youtube-dl . At the moment, only YouTube player files (for videos with obfuscated signatures) are cached, but that may change.')
+        help='you-dl이 다운로드한 일부 정보를 영구적으로 저장할 수 있는 파일 시스템의 위치입니다. 기본적으로 $XDG_CACHE_HOME/youtube-dl 또는 ~.cache/youtube-dl. 현재는 (서명이 난독화된 동영상의 경우) YouTube 플레이어 파일만 캐시되지만 변경될 수 있습니다.')
     filesystem.add_option(
         '--no-cache-dir', action='store_const', const=False, dest='cachedir',
-        help='Disable filesystem caching')
+        help='파일 시스템 캐싱 사용 안 함')
     filesystem.add_option(
         '--rm-cache-dir',
         action='store_true', dest='rm_cachedir',
-        help='Delete all filesystem cache files')
+        help='모든 파일 시스템 캐시 파일 삭제')
 
-    thumbnail = optparse.OptionGroup(parser, 'Thumbnail Options') # 썸네일 옵션
+    thumbnail = optparse.OptionGroup(parser, 'Thumbnail Options')
     thumbnail.add_option(
         '--write-thumbnail',
         action='store_true', dest='writethumbnail', default=False,
-        help='Write thumbnail image to disk')
+        help='디스크에 섬네일 이미지 쓰기')
     thumbnail.add_option(
         '--write-all-thumbnails',
         action='store_true', dest='write_all_thumbnails', default=False,
-        help='Write all thumbnail image formats to disk')
+        help='모든 섬네일 이미지 형식을 디스크에 기록')
     thumbnail.add_option(
         '--list-thumbnails',
         action='store_true', dest='list_thumbnails', default=False,
-        help='Simulate and list all available thumbnail formats')
+        help='사용 가능한 모든 섬네일 형식 시뮬레이션 및 나열')
 
-    postproc = optparse.OptionGroup(parser, 'Post-processing Options') 
+    postproc = optparse.OptionGroup(parser, 'Post-processing Options')
     postproc.add_option(
-        '-x', '--extract-audio', # 오디오 추출
+        '-x', '--extract-audio',
         action='store_true', dest='extractaudio', default=False,
-        help='Convert video files to audio-only files (requires ffmpeg/avconv and ffprobe/avprobe)')
-    postproc.add_option( 
-        '--audio-format', metavar='FORMAT', dest='audioformat', default='best', # 오디오 형식
-        help='Specify audio format: "best", "aac", "flac", "mp3", "m4a", "opus", "vorbis", or "wav"; "%default" by default; No effect without -x')
+        help='비디오 파일을 오디오 전용 파일로 변환(ffmpeg/avconv 및 ffprobe/avprobe)')
     postproc.add_option(
-        '--audio-quality', metavar='QUALITY', # 오디오 음질
+        '--audio-format', metavar='FORMAT', dest='audioformat', default='best',
+        help='오디오 형식 지정: "best", "aac", "flac", "mp3", "m4a", "opus", "vorbis" 또는 "flac"; 기본값으로 "%default", -x"가 없으면 효과 없음')
+    postproc.add_option(
+        '--audio-quality', metavar='QUALITY',
         dest='audioquality', default='5',
-        help='Specify ffmpeg/avconv audio quality, insert a value between 0 (better) and 9 (worse) for VBR or a specific bitrate like 128K (default %default)')
+        help='fmpeg/avconv 오디오 품질을 지정하고, VBR에 대해 0(숫자)과 9(숫자) 사이의 값을 삽입하거나 128K(기본값 %기본값)와 같은 특정 비트 전송률을 삽입하십시오.')
     postproc.add_option(
-        '--recode-video', # 비디오 레코딩
+        '--recode-video',
         metavar='FORMAT', dest='recodevideo', default=None,
-        help='Encode the video to another format if necessary (currently supported: mp4|flv|ogg|webm|mkv|avi)')
+        help='필요한 경우 비디오를 다른 형식으로 인코딩합니다(현재 지원되는 형식: mp4|flv|ogg|webm|httpsv|avi).')
     postproc.add_option(
         '--postprocessor-args',
         dest='postprocessor_args', metavar='ARGS',
-        help='Give these arguments to the postprocessor (if postprocessing is required)')
+        help='후처리기에 이 인수를 제공합니다(후처리가 필요한 경우).')
     postproc.add_option(
         '-k', '--keep-video',
         action='store_true', dest='keepvideo', default=False,
-        help='Keep the video file on disk after the post-processing; the video is erased by default')
+        help='후 처리 후에도 비디오 파일을 디스크에 보관합니다. 기본적으로 비디오는 지워집니다.')
     postproc.add_option(
         '--no-post-overwrites',
         action='store_true', dest='nopostoverwrites', default=False,
-        help='Do not overwrite post-processed files; the post-processed files are overwritten by default')
+        help='삭제 후 파일을 덮어쓰지 않습니다. 삭제 후 파일은 기본적으로 덮어씁니다.')
     postproc.add_option(
-        '--embed-subs', # 자막 포함
+        '--embed-subs',
         action='store_true', dest='embedsubtitles', default=False,
-        help='Embed subtitles in the video (only for mp4, webm and mkv videos)')
+        help='비디오에 자막이 내장되어 있습니다(mp4, webm 및 mkv 비디오에만 해당).')
     postproc.add_option(
-        '--embed-thumbnail', # 썸네일 포함
+        '--embed-thumbnail',
         action='store_true', dest='embedthumbnail', default=False,
-        help='Embed thumbnail in the audio as cover art')
+        help='오디오에 커버 아트로 썸네일 포함')
     postproc.add_option(
         '--add-metadata',
         action='store_true', dest='addmetadata', default=False,
-        help='Write metadata to the video file')
+        help='비디오 파일에 메타데이터 쓰기')
     postproc.add_option(
         '--metadata-from-title',
         metavar='FORMAT', dest='metafromtitle',
-        help='Parse additional metadata like song title / artist from the video title. '
-             'The format syntax is the same as --output. Regular expression with '
-             'named capture groups may also be used. '
-             'The parsed parameters replace existing values. '
-             'Example: --metadata-from-title "%(artist)s - %(title)s" matches a title like '
-             '"Coldplay - Paradise". '
-             'Example (regex): --metadata-from-title "(?P<artist>.+?) - (?P<title>.+)"')
+        help='노래 제목/아티스트와 같은 추가 메타데이터를 비디오 제목에서 구문 분석합니다. '
+             '형식 구문은 --output과 동일합니다. 명명된 캡처 그룹이 있는 정규식을 사용할 수도 있습니다. '
+             '파싱된 매개변수가 기존 값을 대체합니다. '
+             '예시: --metadata-from-title "%(artist)s - %(title)s" "Coldplay - Paradise"와 같은 제목과 일치합니다. '
+             '예시 (regex): --metadata-from-title "(?P<artist>.+?) - (?P<title>.+)"')
     postproc.add_option(
         '--xattrs',
         action='store_true', dest='xattrs', default=False,
-        help='Write metadata to the video file\'s xattrs (using dublin core and xdg standards)')
+        help='비디오 파일에 메타데이터 쓰기\"의 xattrs(더블린 코어 및 xdg 표준 사용)')
     postproc.add_option(
         '--fixup',
         metavar='POLICY', dest='fixup', default='detect_or_warn',
-        help='Automatically correct known faults of the file. '
-             'One of never (do nothing), warn (only emit a warning), '
-             'detect_or_warn (the default; fix file if we can, warn otherwise)')
+        help='파일의 알려진 결함을 자동으로 수정합니다. '
+             '절대(아무것도 하지 않음), 경고(경고만 발함),'
+             'filename_or_filename(기본값; 가능하면 파일 수정, 그렇지 않으면 경고)')
     postproc.add_option(
         '--prefer-avconv',
         action='store_false', dest='prefer_ffmpeg',
-        help='Prefer avconv over ffmpeg for running the postprocessors')
+        help='포스트 프로세서 실행을 위해 ffmpeg보다 avconv 선호')
     postproc.add_option(
         '--prefer-ffmpeg',
         action='store_true', dest='prefer_ffmpeg',
-        help='Prefer ffmpeg over avconv for running the postprocessors (default)')
+        help='포스트 프로세서 실행을 위해 avconv보다 ffmpeg 선호(기본값)')
     postproc.add_option(
         '--ffmpeg-location', '--avconv-location', metavar='PATH',
         dest='ffmpeg_location',
-        help='Location of the ffmpeg/avconv binary; either the path to the binary or its containing directory.')
+        help='fmpeg/avconv 바이너리의 위치로, 바이너리의 경로 또는 포함된 디렉토리 중 하나입니다.')
     postproc.add_option(
         '--exec',
         metavar='CMD', dest='exec_cmd',
-        help='Execute a command on the file after downloading and post-processing, similar to find\'s -exec syntax. Example: --exec \'adb push {} /sdcard/Music/ && rm {}\'')
+        help='find\'s -exec 구문과 유사하게 다운로드 및 후 처리 후 파일에서 명령을 실행합니다. 예: --exec \'adb push {} /sdcard/Music/ &&rm {}\')')
     postproc.add_option(
         '--convert-subs', '--convert-subtitles',
         metavar='FORMAT', dest='convertsubtitles', default=None,
-        help='Convert the subtitles to other format (currently supported: srt|ass|vtt|lrc)')
+        help='자막을 다른 형식으로 변환합니다(현재 지원되는 형식: srt|ass|vtt|lrc).')
+
     # 여기까지 옵션 추가 
     parser.add_option_group(general)
     parser.add_option_group(network)

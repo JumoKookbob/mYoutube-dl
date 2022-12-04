@@ -231,6 +231,26 @@ def _real_main(argv=None):
     if opts.allsubtitles and not opts.writeautomaticsub:
         opts.writesubtitles = True
 
+
+    #경로 설정용
+    try:
+        f = open('./directory_path.txt', 'r')
+        text = f.read()
+        f.close()
+        if(text == ""):
+            raise FileNotFoundError
+    except FileNotFoundError:
+        print("다운로드 경로 설정 파일이 없습니다. 경로를 먼저 설정해주세요.")
+        print("예) 바탕화면 - C:\\Users\\사용자폴더명\\Desktop\n")
+        f = open('./directory_path.txt', 'w')
+        f.write(input("원하는 경로를 입력해주세요. : "))
+        f.close()
+        f = open('./directory_path.txt', 'r')
+        text = f.read()
+        print("해당 경로로 설정되었습니다. : %s\n" %text)
+        print("다운로드 경로를 변경하고 싶은 경우 youtube-dl.exe 파일이 위치한 폴더에서 directory_path.txt 파일을 수정하십시오.\n")
+        f.close()
+
     outtmpl = ((opts.outtmpl is not None and opts.outtmpl)
                or (opts.format == '-1' and opts.usetitle and '%(title)s-%(id)s-%(format)s.%(ext)s')
                or (opts.format == '-1' and '%(id)s-%(format)s.%(ext)s')
@@ -239,6 +259,10 @@ def _real_main(argv=None):
                or (opts.useid and '%(id)s.%(ext)s')
                or (opts.autonumber and '%(autonumber)s-%(id)s.%(ext)s')
                or DEFAULT_OUTTMPL)
+
+    temp = os.path.join(text, outtmpl)
+    outtmpl = temp
+
     if not os.path.splitext(outtmpl)[1] and opts.extractaudio:
         parser.error('Cannot download a video and extract audio into the same'
                      ' file! Use "{0}.%(ext)s" instead of "{0}" as the output'
