@@ -1,12 +1,12 @@
 from __future__ import unicode_literals
 
-import itertools
-import json
-import math
-import operator
-import re
+import itertools # 효율적인 루핑을 위한 이터레이터를 만드는 모듈 
+import json # json 데이터를 다룸
+import math # 수학
+import operator # 효율적인 연산
+import re # 정규표현식 모듈
 
-from .utils import (
+from .utils import ( 
     error_to_compat_str,
     ExtractorError,
     js_to_json,
@@ -23,16 +23,16 @@ from .compat import (
 
 def _js_bit_op(op):
 
-    def zeroise(x):
+    def zeroise(x): # x가 선언되지 않으면 0을 반환, 그 외엔 x를 반환
         return 0 if x in (None, JS_Undefined) else x
 
-    def wrapped(a, b):
-        return op(zeroise(a), zeroise(b)) & 0xffffffff
+    def wrapped(a, b): # 비트연산
+        return op(zeroise(a), zeroise(b)) & 0xffffffff 
 
     return wrapped
 
 
-def _js_arith_op(op):
+def _js_arith_op(op): 
 
     def wrapped(a, b):
         if JS_Undefined in (a, b):

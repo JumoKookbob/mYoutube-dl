@@ -1,53 +1,53 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
-import base64
-import binascii
-import collections
-import ctypes
-import email
-import getpass
-import io
-import itertools
-import optparse
-import os
-import platform
-import re
-import shlex
-import shutil
-import socket
-import struct
-import subprocess
-import sys
-import xml.etree.ElementTree
+import base64 # 인코딩
+import binascii # 바이너리-아스키 변환
+import collections # 내장 컨테이너 타입보다 더 강화된 컨테이너 타입 
+import ctypes # c언어 호환 데이터형 제공
+import email # 이메일 관련 묘듈
+import getpass # 비밀번호를 입력할 때 이를 화면에 노출하지 않도록 하는 모듈
+import io # 스트림 작업
+import itertools # 효율적인 루핑을 위한 이터레이터를 만드는 모듈 
+import optparse # 명령 줄 옵션을 구문 분석하기 위한 모듈
+import os # 운영체제를 활용할 수 있게 하는 모듈
+import platform # 시스템 정보를 확인할 때 사용하는 모듈
+import re # 정규표현식 모듈 
+import shlex # 유닉스 셸과 유사한 간단한 구문에 대한 어휘 분석기 
+import shutil # 파일과 폴더를 이동하거나 복사하고 싶을 때 사용하는 모듈
+import socket # 소켓 모듈
+import struct # 파이썬 bytes 객체로 표현되는 C 구조체 사이의 변환을 수행
+import subprocess # 파이썬 스크립트에서 쉘 명령 등 다른 프로세스를 실행하고 출력 결과를 가져올 수 있게 해주는 라이브러리
+import sys # 파이썬 인터프리터가 제공하는 변수와 함수를 직접 제어할 수 있게 해주는 모듈
+import xml.etree.ElementTree # xml 문서를 만드는 모듈
 
 try:
-    import collections.abc as compat_collections_abc
+    import collections.abc as compat_collections_abc # 커스텀 컨테이너 클래스
 except ImportError:
     import collections as compat_collections_abc
 
 try:
-    import urllib.request as compat_urllib_request
+    import urllib.request as compat_urllib_request # url을 가져옴
 except ImportError:  # Python 2
     import urllib2 as compat_urllib_request
 
 try:
-    import urllib.error as compat_urllib_error
+    import urllib.error as compat_urllib_error # urllib.request에 의해 발생하는 예외 클래스
 except ImportError:  # Python 2
     import urllib2 as compat_urllib_error
 
 try:
-    import urllib.parse as compat_urllib_parse
+    import urllib.parse as compat_urllib_parse # url 파싱
 except ImportError:  # Python 2
     import urllib as compat_urllib_parse
 
 try:
-    from urllib.parse import urlparse as compat_urllib_parse_urlparse
+    from urllib.parse import urlparse as compat_urllib_parse_urlparse # url 파싱
 except ImportError:  # Python 2
     from urlparse import urlparse as compat_urllib_parse_urlparse
 
 try:
-    import urllib.parse as compat_urlparse
+    import urllib.parse as compat_urlparse # url 파싱
 except ImportError:  # Python 2
     import urlparse as compat_urlparse
 
@@ -57,11 +57,11 @@ except ImportError:  # Python 2
     import urllib as compat_urllib_response
 
 try:
-    import http.cookiejar as compat_cookiejar
+    import http.cookiejar as compat_cookiejar # 쿠키 처리
 except ImportError:  # Python 2
     import cookielib as compat_cookiejar
 
-if sys.version_info[0] == 2:
+if sys.version_info[0] == 2: # 파이선 버전이 python 2라면
     class compat_cookiejar_Cookie(compat_cookiejar.Cookie):
         def __init__(self, version, name, value, *args, **kwargs):
             if isinstance(name, compat_str):
@@ -70,29 +70,29 @@ if sys.version_info[0] == 2:
                 value = value.encode()
             compat_cookiejar.Cookie.__init__(self, version, name, value, *args, **kwargs)
 else:
-    compat_cookiejar_Cookie = compat_cookiejar.Cookie
+    compat_cookiejar_Cookie = compat_cookiejar.Cookie # 쿠키
 
 try:
-    import http.cookies as compat_cookies
+    import http.cookies as compat_cookies #  쿠키의 개념을 추상화하는 클래스
 except ImportError:  # Python 2
     import Cookie as compat_cookies
 
-if sys.version_info[0] == 2:
+if sys.version_info[0] == 2: # 파이썬 2일때 
     class compat_cookies_SimpleCookie(compat_cookies.SimpleCookie):
         def load(self, rawdata):
             if isinstance(rawdata, compat_str):
                 rawdata = str(rawdata)
             return super(compat_cookies_SimpleCookie, self).load(rawdata)
 else:
-    compat_cookies_SimpleCookie = compat_cookies.SimpleCookie
+    compat_cookies_SimpleCookie = compat_cookies.SimpleCookie # SimpleCookie는 내장 str()을 호출하여 값을 문자열로 변환
 
 try:
-    import html.entities as compat_html_entities
+    import html.entities as compat_html_entities 
 except ImportError:  # Python 2
     import htmlentitydefs as compat_html_entities
 
 try:  # Python >= 3.3
-    compat_html_entities_html5 = compat_html_entities.html5
+    compat_html_entities_html5 = compat_html_entities.html5  # html escape 문자들을 unescape 해서 스트링으로 변환
 except AttributeError:
     # Copied from CPython 3.5.1 html/entities.py
     compat_html_entities_html5 = {
@@ -2330,30 +2330,30 @@ except AttributeError:
     }
 
 try:
-    import http.client as compat_http_client
+    import http.client as compat_http_client # HTTP 프로토콜의 클라이언트 역할을 하는 모듈
 except ImportError:  # Python 2
     import httplib as compat_http_client
 
 try:
-    from urllib.error import HTTPError as compat_HTTPError
+    from urllib.error import HTTPError as compat_HTTPError # compat_HTTPError  : HTTPError
 except ImportError:  # Python 2
     from urllib2 import HTTPError as compat_HTTPError
 
 try:
-    from urllib.request import urlretrieve as compat_urlretrieve
+    from urllib.request import urlretrieve as compat_urlretrieve # 웹에서 이미지 다운로드
 except ImportError:  # Python 2
     from urllib import urlretrieve as compat_urlretrieve
 
 try:
-    from html.parser import HTMLParser as compat_HTMLParser
+    from html.parser import HTMLParser as compat_HTMLParser # html 문자를 파싱
 except ImportError:  # Python 2
     from HTMLParser import HTMLParser as compat_HTMLParser
 
 try:  # Python 2
-    from HTMLParser import HTMLParseError as compat_HTMLParseError
+    from HTMLParser import HTMLParseError as compat_HTMLParseError 
 except ImportError:  # Python <3.4
     try:
-        from html.parser import HTMLParseError as compat_HTMLParseError
+        from html.parser import HTMLParseError as compat_HTMLParseError # 파싱 에러
     except ImportError:  # Python >3.4
 
         # HTMLParseError has been deprecated in Python 3.3 and removed in
@@ -2363,13 +2363,13 @@ except ImportError:  # Python <3.4
             pass
 
 try:
-    from subprocess import DEVNULL
+    from subprocess import DEVNULL # stdout 등이 필요없을 때 혹은 출력하고 싶지 않을 때 사용
     compat_subprocess_get_DEVNULL = lambda: DEVNULL
 except ImportError:
     compat_subprocess_get_DEVNULL = lambda: open(os.path.devnull, 'w')
 
 try:
-    import http.server as compat_http_server
+    import http.server as compat_http_server # 웹서버 가동
 except ImportError:
     import BaseHTTPServer as compat_http_server
 
@@ -2390,16 +2390,16 @@ except ImportError:  # Python 2
     # implementations from cpython 3.4.3's stdlib. Python 2's version
     # is apparently broken (see https://github.com/ytdl-org/youtube-dl/pull/6244)
 
-    def compat_urllib_parse_unquote_to_bytes(string):
+    def compat_urllib_parse_unquote_to_bytes(string): 
         """unquote_to_bytes('abc%20def') -> b'abc def'."""
         # Note: strings are encoded as UTF-8. This is only an issue if it contains
         # unescaped non-ASCII characters, which URIs should not.
-        if not string:
+        if not string: 
             # Is it a string-like object?
-            string.split
-            return b''
-        if isinstance(string, compat_str):
-            string = string.encode('utf-8')
+            string.split 
+            return b'' 
+        if isinstance(string, compat_str): # string이 compat_str일경우
+            string = string.encode('utf-8') # utf-8로 인코딩
         bits = string.split(b'%')
         if len(bits) == 1:
             return string
@@ -2456,23 +2456,23 @@ except ImportError:  # Python 2
     # the friends or manually ensure input query contains only byte strings.
     # We will stick with latter thus recursively encoding the whole query.
     def compat_urllib_parse_urlencode(query, doseq=0, encoding='utf-8'):
-        def encode_elem(e):
-            if isinstance(e, dict):
+        def encode_elem(e): 
+            if isinstance(e, dict): # e가 딕셔너리면 딕셔너리 인코드 
                 e = encode_dict(e)
-            elif isinstance(e, (list, tuple,)):
+            elif isinstance(e, (list, tuple,)): # e가 리스트나 토플이면 리스트 인코드
                 list_e = encode_list(e)
                 e = tuple(list_e) if isinstance(e, tuple) else list_e
-            elif isinstance(e, compat_str):
+            elif isinstance(e, compat_str): # e가 compat_str이면 encode
                 e = e.encode(encoding)
-            return e
+            return e 
 
-        def encode_dict(d):
+        def encode_dict(d): # 딕셔너리를 인코드
             return dict((encode_elem(k), encode_elem(v)) for k, v in d.items())
 
-        def encode_list(l):
+        def encode_list(l): # 리스트를 인코드
             return [encode_elem(e) for e in l]
 
-        return compat_urllib_parse.urlencode(encode_elem(query), doseq=doseq)
+        return compat_urllib_parse.urlencode(encode_elem(query), doseq=doseq) # query를 인코드한 것으로 재귀함수
 
 try:
     from urllib.request import DataHandler as compat_urllib_request_DataHandler
@@ -2489,7 +2489,7 @@ except ImportError:  # Python < 3.4
             # mediatype := [ type "/" subtype ] *( ";" parameter )
             # data      := *urlchar
             # parameter := attribute "=" value
-            url = req.get_full_url()
+            url = req.get_full_url() # url을 반환
 
             scheme, data = url.split(':', 1)
             mediatype, data = data.split(',', 1)
@@ -2657,8 +2657,8 @@ except ImportError:  # Python 2
 compat_os_name = os._name if os.name == 'java' else os.name
 
 
-if compat_os_name == 'nt':
-    def compat_shlex_quote(s):
+if compat_os_name == 'nt': 
+    def compat_shlex_quote(s): # 
         return s if re.match(r'^[-_\w./]+$', s) else '"%s"' % s.replace('"', '\\"')
 else:
     try:
@@ -2681,24 +2681,24 @@ except (AssertionError, UnicodeEncodeError):
     # Working around shlex issue with unicode strings on some python 2
     # versions (see http://bugs.python.org/issue1548891)
     def compat_shlex_split(s, comments=False, posix=True):
-        if isinstance(s, compat_str):
+        if isinstance(s, compat_str): 
             s = s.encode('utf-8')
         return list(map(lambda s: s.decode('utf-8'), shlex.split(s, comments, posix)))
 
 
 def compat_ord(c):
     if type(c) is int:
-        return c
+        return c # 정수라 필요 x
     else:
-        return ord(c)
+        return ord(c) # c를 아스키로 반환
 
 
 if sys.version_info >= (3, 0):
-    compat_getenv = os.getenv
-    compat_expanduser = os.path.expanduser
+    compat_getenv = os.getenv # 환경 변수
+    compat_expanduser = os.path.expanduser # 홈 디렉토리의 절대경로로 대체
 
     def compat_setenv(key, value, env=os.environ):
-        env[key] = value
+        env[key] = value # 환경변수의 key값에 value를 대입
 else:
     # Environment variables should be decoded with filesystem encoding.
     # Otherwise it will fail if any non-ASCII characters present (see #3854 #3217 #2918)
@@ -2786,7 +2786,7 @@ if compat_os_name == 'nt' and sys.version_info < (3, 8):
             path = os.path.abspath(os.readlink(path))
         return path
 else:
-    compat_realpath = os.path.realpath
+    compat_realpath = os.path.realpath # 
 
 
 if sys.version_info < (3, 0):
@@ -2795,8 +2795,8 @@ if sys.version_info < (3, 0):
         print(s.encode(preferredencoding(), 'xmlcharrefreplace'))
 else:
     def compat_print(s):
-        assert isinstance(s, compat_str)
-        print(s)
+        assert isinstance(s, compat_str) # s가 compat_str이면
+        print(s) # s 출력
 
 
 if sys.version_info < (3, 0) and sys.platform == 'win32':
@@ -2806,7 +2806,7 @@ if sys.version_info < (3, 0) and sys.platform == 'win32':
             prompt = prompt.encode(preferredencoding())
         return getpass.getpass(prompt, *args, **kwargs)
 else:
-    compat_getpass = getpass.getpass
+    compat_getpass = getpass.getpass # 화면에 출력 않고 패스워드 입력
 
 try:
     compat_input = raw_input
@@ -2820,7 +2820,7 @@ try:
     _testfunc(**{'x': 0})
 except TypeError:
     def compat_kwargs(kwargs):
-        return dict((bytes(k), v) for k, v in kwargs.items())
+        return dict((bytes(k), v) for k, v in kwargs.items()) # kwargs.items의 (바이트 값, 값)의 딕셔너리를 반환
 else:
     compat_kwargs = lambda kwargs: kwargs
 
@@ -2828,7 +2828,7 @@ else:
 try:
     compat_numeric_types = (int, float, long, complex)
 except NameError:  # Python 3
-    compat_numeric_types = (int, float, complex)
+    compat_numeric_types = (int, float, complex) # 정수, 유리수, 복소수 타입 튜플
 
 
 try:
@@ -2865,11 +2865,11 @@ else:
 
 # Fix https://github.com/ytdl-org/youtube-dl/issues/4223
 # See http://bugs.python.org/issue9161 for what is broken
-def workaround_optparse_bug9161():
-    op = optparse.OptionParser()
-    og = optparse.OptionGroup(op, 'foo')
-    try:
-        og.add_option('-t')
+def workaround_optparse_bug9161(): # optparse.OptionParser와 optparse.OptionGroup이 되는지 확인하고 되지 않으면 새로운 함수를
+    op = optparse.OptionParser() # 옵션을 해석하는 객체
+    og = optparse.OptionGroup(op, 'foo') # foo 옵션 그룹에 넣음
+    try: 
+        og.add_option('-t') # og에 -t라는 옵션을 추가
     except TypeError:
         real_add_option = optparse.OptionGroup.add_option
 
@@ -2885,7 +2885,7 @@ def workaround_optparse_bug9161():
 
 
 if hasattr(shutil, 'get_terminal_size'):  # Python >= 3.3
-    compat_get_terminal_size = shutil.get_terminal_size
+    compat_get_terminal_size = shutil.get_terminal_size # 터미널 창의 크기
 else:
     _terminal_size = collections.namedtuple('terminal_size', ['columns', 'lines'])
 

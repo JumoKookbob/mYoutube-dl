@@ -66,7 +66,7 @@ class ExternalFD(FileDownloader):
             return False
 
     @classmethod
-    def get_basename(cls):
+    def get_basename(cls): 
         return cls.__name__[:-2].lower()
 
     @property

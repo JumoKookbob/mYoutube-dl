@@ -1,5 +1,6 @@
 # Public Domain SOCKS proxy protocol implementation
 # Adapted from https://gist.github.com/bluec0re/cafd3764412967417fd3
+# WebSocket
 
 from __future__ import unicode_literals
 
@@ -98,7 +99,7 @@ class Socks5Error(ProxyError):
     }
 
 
-class ProxyType(object):
+class ProxyType(object): # Proxy 
     SOCKS4 = 0
     SOCKS4A = 1
     SOCKS5 = 2

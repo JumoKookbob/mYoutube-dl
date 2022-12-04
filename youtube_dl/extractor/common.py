@@ -528,18 +528,19 @@ class InfoExtractor(object):
     def extract(self, url):
         """Extracts URL information and returns it in list of dicts."""
         try:
-            for _ in range(2):
+            for _ in range(2): # 두번 반복한다
                 try:
-                    self.initialize()
-                    ie_result = self._real_extract(url)
-                    if self._x_forwarded_for_ip:
+                    self.initialize() # 초기화한다
+                    ie_result = self._real_extract(url) # url의 정보를 추출하여 딕셔너리에 저장한다
+                    if self._x_forwarded_for_ip: # 해당 변수가 초기화 됬다면
+                        # 딕셔너리에 추가하여 반환한다
                         ie_result['__x_forwarded_for_ip'] = self._x_forwarded_for_ip
                     return ie_result
-                except GeoRestrictedError as e:
+                except GeoRestrictedError as e: # 예외처리
                     if self.__maybe_fake_ip_and_retry(e.countries):
                         continue
                     raise
-        except ExtractorError:
+        except ExtractorError: # 예외처리
             raise
         except compat_http_client.IncompleteRead as e:
             raise ExtractorError('A network error has occurred.', cause=e, expected=True)

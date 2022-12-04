@@ -51,11 +51,12 @@ def _real_main(argv=None):
         # https://github.com/ytdl-org/youtube-dl/issues/820
         codecs.register(lambda name: codecs.lookup('utf-8') if name == 'cp65001' else None)
 
+    # optparse.OptionParser와 optparse.OptionGroup이 되는지 확인하고 되지 않으면 새로운 함수를 만들어 사용
     workaround_optparse_bug9161()
 
-    setproctitle('youtube-dl')
+    setproctitle('youtube-dl') # youtube-dl로 프로세스 이름을 지정
 
-    parser, opts, args = parseOpts(argv)
+    parser, opts, args = parseOpts(argv) # 옵션을 분석하고 
 
     # Set user agent
     if opts.user_agent is not None:
@@ -441,11 +442,11 @@ def _real_main(argv=None):
 
     with YoutubeDL(ydl_opts) as ydl:
         # Update version
-        if opts.update_self:
-            update_self(ydl.to_screen, opts.verbose, ydl._opener)
+        if opts.update_self: # 옵션이 업데이트일 경우
+            update_self(ydl.to_screen, opts.verbose, ydl._opener) # 업데이트를 진행
 
         # Remove cache dir
-        if opts.rm_cachedir:
+        if opts.rm_cachedir: 
             ydl.cache.remove()
 
         # Maybe do nothing
@@ -458,10 +459,10 @@ def _real_main(argv=None):
                 'You must provide at least one URL.\n'
                 'Type youtube-dl --help to see a list of all options.')
 
-        try:
-            if opts.load_info_filename is not None:
+        try: # 다운로드
+            if opts.load_info_filename is not None: # info 디렉터리가 있는 경우
                 retcode = ydl.download_with_info_file(expand_path(opts.load_info_filename))
-            else:
+            else: # url을 통한 다운로드일 경우
                 retcode = ydl.download(all_urls)
         except MaxDownloadsReached:
             ydl.to_screen('--max-download limit reached, aborting.')

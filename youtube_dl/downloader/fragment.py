@@ -95,26 +95,27 @@ class FragmentFD(FileDownloader):
         frag_index_stream.write(json.dumps({'downloader': downloader}))
         frag_index_stream.close()
 
-    def _download_fragment(self, ctx, frag_url, info_dict, headers=None):
+    def _download_fragment(self, ctx, frag_url, info_dict, headers=None): 
         fragment_filename = '%s-Frag%d' % (ctx['tmpfilename'], ctx['fragment_index'])
         fragment_info_dict = {
             'url': frag_url,
             'http_headers': headers or info_dict.get('http_headers'),
         }
-        success = ctx['dl'].download(fragment_filename, fragment_info_dict)
+        # info_dict의 내용을 통해 filename을 다운로드
+        success = ctx['dl'].download(fragment_filename, fragment_info_dict) #
         if not success:
             return False, None
         if fragment_info_dict.get('filetime'):
             ctx['fragment_filetime'] = fragment_info_dict.get('filetime')
-        down, frag_sanitized = sanitize_open(fragment_filename, 'rb')
+        down, frag_sanitized = sanitize_open(fragment_filename, 'rb') # filename 파일을 읽기 모드로 연다
         ctx['fragment_filename_sanitized'] = frag_sanitized
-        frag_content = down.read()
+        frag_content = down.read() # filename 파일을 읽어서 frag_content 변수에 저장하는 식으로 다운로드를 한다
         down.close()
         return True, frag_content
 
     def _append_fragment(self, ctx, frag_content):
         try:
-            ctx['dest_stream'].write(frag_content)
+            ctx['dest_stream'].write(frag_content) 
             ctx['dest_stream'].flush()
         finally:
             if self.__do_ytdl_file(ctx):

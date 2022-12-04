@@ -29,71 +29,71 @@ import random
 from string import ascii_letters
 
 from .compat import (
-    compat_basestring,
-    compat_cookiejar,
-    compat_get_terminal_size,
-    compat_http_client,
-    compat_kwargs,
-    compat_numeric_types,
-    compat_os_name,
-    compat_str,
-    compat_tokenize_tokenize,
-    compat_urllib_error,
-    compat_urllib_request,
-    compat_urllib_request_DataHandler,
+    compat_basestring, # 문자열
+    compat_cookiejar, # 쿠키 처리
+    compat_get_terminal_size, # 터미널 창의 크기
+    compat_http_client, # HTTP 프로토콜의 클라이언트 역할
+    compat_kwargs, # kwargs.items의 (바이트 값, 값)의 딕셔너리를 반환
+    compat_numeric_types, # 정수, 유리수, 복소수 타입 튜플
+    compat_os_name, # os의 이름 
+    compat_str, # str
+    compat_tokenize_tokenize, # 토큰화
+    compat_urllib_error, # 에러
+    compat_urllib_request, # url을 가져올 수 있음
+    compat_urllib_request_DataHandler, # url 내부 data를 다룸
 )
 from .utils import (
-    age_restricted,
-    args_to_str,
-    ContentTooShortError,
-    date_from_str,
-    DateRange,
-    DEFAULT_OUTTMPL,
-    determine_ext,
-    determine_protocol,
-    DownloadError,
-    encode_compat_str,
-    encodeFilename,
-    error_to_compat_str,
-    expand_path,
-    ExtractorError,
-    format_bytes,
-    formatSeconds,
-    GeoRestrictedError,
-    int_or_none,
-    ISO3166Utils,
-    locked_file,
-    make_HTTPS_handler,
-    MaxDownloadsReached,
-    orderedSet,
-    PagedList,
-    parse_filesize,
-    PerRequestProxyHandler,
-    platform_name,
-    PostProcessingError,
-    preferredencoding,
-    prepend_extension,
-    process_communicate_or_kill,
-    register_socks_protocols,
-    render_table,
-    replace_extension,
-    SameFileError,
-    sanitize_filename,
-    sanitize_path,
-    sanitize_url,
-    sanitized_Request,
-    std_headers,
-    str_or_none,
-    subtitles_filename,
-    UnavailableVideoError,
-    url_basename,
-    version_tuple,
-    write_json_file,
-    write_string,
-    YoutubeDLCookieJar,
+    age_restricted, # 연령제한 
+    args_to_str, # 하위 프로세스 명령에 대한 짧은 문자열 표현 가져오기
+    ContentTooShortError, # 다운로드 하기 너무 작은 파일일 경우 예외
+    date_from_str, # 문자열에서 날짜를 가져옴
+    DateRange, # 두 날짜 사이의 시간 간격을 나타냅니다.
+    DEFAULT_OUTTMPL, # %(title)s-%(id)s.%(ext)s 정규식
+    determine_ext, # 확장자 반환
+    determine_protocol, # # url의 통신 프로토콜 반환
+    DownloadError, # youtube_dl 다운로드 중 에러 발생시 예외
+    encode_compat_str, # compat_str 인코딩
+    encodeFilename, # 파일 이름을 반환 
+    error_to_compat_str, # 에러 내용을 출력
+    expand_path,  # 홈 디렉토리를 절대 경로로 바꿈
+    ExtractorError, # 동영상 추출 중 에러 시 예외
+    format_bytes, # 
+    formatSeconds, # 시간 단위 출력 
+    GeoRestrictedError, # 이용자가 이용자의 국가에서 허가되지 않는 사이트를 추출하려 할때 발생하는 예외
+    int_or_none, # 이름 그대로 
+    ISO3166Utils, # {kr : korean} 처럼 국가 이름과 iso명의 디렉토리 
+    locked_file, # 
+    make_HTTPS_handler, # https 핸들러를 만듦
+    MaxDownloadsReached, # 다운로드를 최대한 하면 발생하는 예외
+    orderedSet, # 입력 가능한 항목에서 모든 중복 항목 제거하는 메소드 
+    PagedList, # 
+    parse_filesize, # 
+    PerRequestProxyHandler, # proxy 핸들러
+    platform_name, # 플랫폼의 이름을 compat_str 형태로 반환
+    PostProcessingError, # PostProcessor의 .run() 메서드에서 발생하여 후 처리 작업의 오류를 나타냄
+    preferredencoding, # 인코딩 타입을 반환
+    prepend_extension, # 파일과 부가 확장자, 파일 확장자를 반환
+    process_communicate_or_kill, # 자식 프로세스의 출력을 반환 
+    register_socks_protocols, # 웹소켓 프로토콜을 등록 
+    render_table, # 테이블의 각 행을 각 목록으로 렌더링
+    replace_extension, # 확장자가 없거나 예상 확장자랑 같으면 파일 이름만 반환, 아니면 파일명, 확장자를 반환 
+    SameFileError, # 같은 파일이나 디스크를 다운받으려고 하면 발생 
+    sanitize_filename, # 파일 이름으로 사용 가능한지 검사 
+    sanitize_path, # Windows에서 경로를 검사하고 표준화합니다.
+    sanitize_url, # 프로토콜이 없는 url에 https:를 붙임
+    sanitized_Request, # 요청을 검사
+    std_headers, # 
+    str_or_none, # 말그래도 스트링인지 아닌지 검사
+    subtitles_filename, # 자막 파일 이름 
+    UnavailableVideoError, # 이용 불가한 영상을 추출할때 발생
+    url_basename,  # url의 마지막 부분
+    version_tuple, # 버전 튜플
+    write_json_file, # json 파일을 쓰도록 함 
+    write_string, # 파일에 s나 out을 적는다
+    YoutubeDLCookieJar, # 쿠키를 저장, 로드하는 클래스 
     YoutubeDLCookieProcessor,
-    YoutubeDLHandler,
-    YoutubeDLRedirectHandler,
+    YoutubeDLHandler, # https 요청, 반응 클래스
+    YoutubeDLRedirectHandler, # https 재응답 클래스
 )
 from .cache import Cache
 from .extractor import get_info_extractor, gen_extractor_classes, _LAZY_LOADER
@@ -363,7 +363,7 @@ class YoutubeDL(object):
         self.params.update(params)
         self.cache = Cache(self)
 
-        def check_deprecated(param, option, suggestion):
+        def check_deprecated(param, option, suggestion): # param의 아이템이 없으면 다른 옵션을 사용하라는 경고를 띄움
             if self.params.get(param) is not None:
                 self.report_warning(
                     '%s is deprecated. Use %s instead.' % (option, suggestion))
@@ -378,11 +378,11 @@ class YoutubeDL(object):
         check_deprecated('autonumber', '--auto-number', '-o "%(autonumber)s-%(title)s.%(ext)s"')
         check_deprecated('usetitle', '--title', '-o "%(title)s-%(id)s.%(ext)s"')
 
-        if params.get('bidi_workaround', False):
+        if params.get('bidi_workaround', False): # params에 'bidi' : False를 넣음 
             try:
                 import pty
-                master, slave = pty.openpty()
-                width = compat_get_terminal_size().columns
+                master, slave = pty.openpty() # 터미널 창을 염
+                width = compat_get_terminal_size().columns # 너비는 터미널 사이즈의 세로
                 if width is None:
                     width_args = []
                 else:
@@ -398,7 +398,7 @@ class YoutubeDL(object):
                 except OSError:
                     self._output_process = subprocess.Popen(
                         ['fribidi', '-c', 'UTF-8'] + width_args, **sp_kwargs)
-                self._output_channel = os.fdopen(master, 'rb')
+                self._output_channel = os.fdopen(master, 'rb') # 바이너리 쓰기로 터미널의 master를 염
             except OSError as ose:
                 if ose.errno == errno.ENOENT:
                     self.report_warning('Could not find fribidi executable, ignoring --bidi-workaround . Make sure that  fribidi  is an executable file in one of the directories in your $PATH.')
@@ -415,14 +415,14 @@ class YoutubeDL(object):
                 'Set the LC_ALL environment variable to fix this.')
             self.params['restrictfilenames'] = True
 
-        if isinstance(params.get('outtmpl'), bytes):
-            self.report_warning(
+        if isinstance(params.get('outtmpl'), bytes): # params의 outtmpl의 아이템이 바이트일 경우
+            self.report_warning( # 유니코드로 동작해야하는데 아니라서 경고
                 'Parameter outtmpl is bytes, but should be a unicode string. '
                 'Put  from __future__ import unicode_literals  at the top of your code file or consider switching to Python 3.x.')
 
-        self._setup_opener()
+        self._setup_opener() # 
 
-        if auto_init:
+        if auto_init: # auto_init가 true이면 
             self.print_debug_header()
             self.add_default_info_extractors()
 
@@ -438,7 +438,7 @@ class YoutubeDL(object):
 
         register_socks_protocols()
 
-    def warn_if_short_id(self, argv):
+    def warn_if_short_id(self, argv): # id가 짧으면 경고
         # short YouTube ID starting with dash?
         idxs = [
             i for i, a in enumerate(argv)
@@ -467,9 +467,9 @@ class YoutubeDL(object):
         the _ies list, if there's no instance it will create a new one and add
         it to the extractor list.
         """
-        ie = self._ies_instances.get(ie_key)
+        ie = self._ies_instances.get(ie_key) 
         if ie is None:
-            ie = get_info_extractor(ie_key)()
+            ie = get_info_extractor(ie_key)()  
             self.add_info_extractor(ie)
         return ie
 
@@ -635,7 +635,7 @@ class YoutubeDL(object):
         except UnicodeEncodeError:
             self.to_screen('[download] The file has already been downloaded')
 
-    def prepare_filename(self, info_dict):
+    def prepare_filename(self, info_dict): #
         """Generate the output filename."""
         try:
             template_dict = dict(info_dict)
@@ -724,7 +724,7 @@ class YoutubeDL(object):
             self.report_error('Error in output template: ' + error_to_compat_str(err) + ' (encoding: ' + repr(preferredencoding()) + ')')
             return None
 
-    def _match_entry(self, info_dict, incomplete):
+    def _match_entry(self, info_dict, incomplete): #
         """ Returns None iff the file should be downloaded """
 
         video_title = info_dict.get('title', info_dict.get('id', 'video'))
@@ -772,7 +772,7 @@ class YoutubeDL(object):
         for key, value in extra_info.items():
             info_dict.setdefault(key, value)
 
-    def extract_info(self, url, download=True, ie_key=None, extra_info={},
+    def extract_info(self, url, download=True, ie_key=None, extra_info={}, #
                      process=True, force_generic_extractor=False):
         """
         Return a list with a dictionary for each video extracted.
@@ -793,7 +793,7 @@ class YoutubeDL(object):
             ie_key = 'Generic'
 
         if ie_key:
-            ies = [self.get_info_extractor(ie_key)]
+            ies = [self.get_info_extractor(ie_key)] # ie 값 저장
         else:
             ies = self._ies
 
@@ -810,7 +810,7 @@ class YoutubeDL(object):
         else:
             self.report_error('no suitable InfoExtractor for URL %s' % url)
 
-    def __handle_extraction_exceptions(func):
+    def __handle_extraction_exceptions(func): #
         def wrapper(self, *args, **kwargs):
             try:
                 return func(self, *args, **kwargs)
@@ -857,7 +857,7 @@ class YoutubeDL(object):
             'extractor_key': ie.ie_key(),
         })
 
-    def process_ie_result(self, ie_result, download=True, extra_info={}):
+    def process_ie_result(self, ie_result, download=True, extra_info={}): #
         """
         Take the result of the ie(may be modified) and resolve all unresolved
         references (URLs, playlist items).
@@ -865,9 +865,9 @@ class YoutubeDL(object):
         It will also download the videos if 'download'.
         Returns the resolved ie_result.
         """
-        result_type = ie_result.get('_type', 'video')
+        result_type = ie_result.get('_type', 'video') # 딕셔너리에서(info) _type, video의 값을 튜플로 저장
 
-        if result_type in ('url', 'url_transparent'):
+        if result_type in ('url', 'url_transparent'): 
             ie_result['url'] = sanitize_url(ie_result['url'])
             extract_flat = self.params.get('extract_flat', False)
             if ((extract_flat == 'in_playlist' and 'playlist' in extra_info)
@@ -960,7 +960,7 @@ class YoutubeDL(object):
         else:
             raise Exception('Invalid result type: %s' % result_type)
 
-    def __process_playlist(self, ie_result, download):
+    def __process_playlist(self, ie_result, download): #
         # We process each entry in the playlist
         playlist = ie_result.get('title') or ie_result.get('id')
 
@@ -1077,7 +1077,7 @@ class YoutubeDL(object):
         return self.process_ie_result(
             entry, download=download, extra_info=extra_info)
 
-    def _build_format_filter(self, filter_spec):
+    def _build_format_filter(self, filter_spec): #
         " Returns a function to filter the formats according to the filter_spec "
 
         OPERATORS = {
@@ -1247,7 +1247,7 @@ class YoutubeDL(object):
                             raise syntax_error('"/" must follow a format selector', start)
                         first_choice = current_selector
                         second_choice = _parse_format_selection(tokens, inside_choice=True)
-                        current_selector = FormatSelector(PICKFIRST, (first_choice, second_choice), [])
+                        current_selector = FormatSelector(PICKFIRST, (first_choice, second_choice), []) 
                     elif string == '[':
                         if not current_selector:
                             current_selector = FormatSelector(SINGLE, 'best', [])
@@ -2067,14 +2067,14 @@ class YoutubeDL(object):
 
     def download(self, url_list):
         """Download a given list of URLs."""
-        outtmpl = self.params.get('outtmpl', DEFAULT_OUTTMPL)
+        outtmpl = self.params.get('outtmpl', DEFAULT_OUTTMPL) # 저장 경로 템플릿
         if (len(url_list) > 1
                 and outtmpl != '-'
                 and '%' not in outtmpl
                 and self.params.get('max_downloads') != 1):
             raise SameFileError(outtmpl)
 
-        for url in url_list:
+        for url in url_list: 
             try:
                 # It also downloads the videos
                 res = self.extract_info(
@@ -2091,14 +2091,17 @@ class YoutubeDL(object):
         return self._download_retcode
 
     def download_with_info_file(self, info_filename):
-        with contextlib.closing(fileinput.FileInput(
-                [info_filename], mode='r',
-                openhook=fileinput.hook_encoded('utf-8'))) as f:
+        with contextlib.closing(fileinput.FileInput( # 블록이 끝나면 종료됨
+                [info_filename], mode='r', # 읽기모드로 파일을 열고 info_filename을 사용할 수 있게 한다
+                openhook=fileinput.hook_encoded('utf-8')) # utf-8로 인코딩시켜 open()할 수 있는 훅
+                ) as f: 
             # FileInput doesn't have a read method, we can't call json.load
             info = self.filter_requested_info(json.loads('\n'.join(f)))
+            # f로 읽어들인 딕셔너리의 key값이 ['requested_formats', 'requested_subtitles'] 이 아니라면
+            # 새 딕셔너리에 저장하고 반환
         try:
-            self.process_ie_result(info, download=True)
-        except DownloadError:
+            self.process_ie_result(info, download=True) # info를 토대로 다운로드를 진행한다
+        except DownloadError: # 오류 발생시 딕셔너리를 통해 url을 얻고 url download를 진행
             webpage_url = info.get('webpage_url')
             if webpage_url is not None:
                 self.report_warning('The info failed to download, trying with "%s"' % webpage_url)

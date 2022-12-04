@@ -58,7 +58,7 @@ class FileDownloader(object):
     _TEST_FILE_SIZE = 10241
     params = None
 
-    def __init__(self, ydl, params):
+    def __init__(self, ydl, params): # 생성자
         """Create a FileDownloader object with the given options."""
         self.ydl = ydl
         self._progress_hooks = []
@@ -66,7 +66,7 @@ class FileDownloader(object):
         self.add_progress_hook(self.report_progress)
 
     @staticmethod
-    def format_seconds(seconds):
+    def format_seconds(seconds): # 다운로드 시간 반환
         (mins, secs) = divmod(seconds, 60)
         (hours, mins) = divmod(mins, 60)
         if hours > 99:
@@ -77,19 +77,19 @@ class FileDownloader(object):
             return '%02d:%02d:%02d' % (hours, mins, secs)
 
     @staticmethod
-    def calc_percent(byte_counter, data_len):
+    def calc_percent(byte_counter, data_len): # 데이터 크기 계산
         if data_len is None:
             return None
         return float(byte_counter) / float(data_len) * 100.0
 
     @staticmethod
-    def format_percent(percent):
+    def format_percent(percent): # 다운로드한 크기 반환
         if percent is None:
             return '---.-%'
         return '%6s' % ('%3.1f%%' % percent)
 
     @staticmethod
-    def calc_eta(start, now, total, current):
+    def calc_eta(start, now, total, current): # 다운로드 예정 시간 계산
         if total is None:
             return None
         if now is None:
@@ -107,14 +107,14 @@ class FileDownloader(object):
         return FileDownloader.format_seconds(eta)
 
     @staticmethod
-    def calc_speed(start, now, bytes):
+    def calc_speed(start, now, bytes): # 다운로드 속도 계산
         dif = now - start
         if bytes == 0 or dif < 0.001:  # One millisecond
             return None
         return float(bytes) / dif
 
     @staticmethod
-    def format_speed(speed):
+    def format_speed(speed): # 속도 반환
         if speed is None:
             return '%10s' % '---b/s'
         return '%10s' % ('%s/s' % format_bytes(speed))
@@ -224,7 +224,7 @@ class FileDownloader(object):
             pass
         return filetime
 
-    def report_destination(self, filename):
+    def report_destination(self, filename): 
         """Report destination filename."""
         self.to_screen('[download] Destination: ' + filename)
 

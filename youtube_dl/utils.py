@@ -69,7 +69,7 @@ from .compat import (
 )
 
 from .socks import (
-    ProxyType,
+    ProxyType, # 프록시
     sockssocket,
 )
 
@@ -1804,8 +1804,8 @@ def preferredencoding():
     locale.getpreferredencoding() and some further tweaks.
     """
     try:
-        pref = locale.getpreferredencoding()
-        'TEST'.encode(pref)
+        pref = locale.getpreferredencoding() # 사용자 환경 설정에 따라 텍스트 데이터에 사용되는 인코딩 방식을 반환하는 함수
+        'TEST'.encode(pref) # pref에 따라 'TEST'를 인코드
     except Exception:
         pref = 'UTF-8'
 
@@ -1820,7 +1820,7 @@ def write_json_file(obj, fn):
         encoding = get_filesystem_encoding()
         # os.path.basename returns a bytes object, but NamedTemporaryFile
         # will fail if the filename contains non ascii characters unless we
-        # use a unicode object
+        # use a unicode object#
         path_basename = lambda f: os.path.basename(fn).decode(encoding)
         # the same for os.path.dirname
         path_dirname = lambda f: os.path.dirname(fn).decode(encoding)
@@ -2182,7 +2182,7 @@ def sanitized_Request(url, *args, **kwargs):
 
 def expand_path(s):
     """Expand shell variables and ~"""
-    return os.path.expandvars(compat_expanduser(s))
+    return os.path.expandvars(compat_expanduser(s)) # 홈 디렉토리를 절대 경로로 바꿈
 
 
 def orderedSet(iterable):
@@ -2236,7 +2236,7 @@ def unescapeHTML(s):
 
 def process_communicate_or_kill(p, *args, **kwargs):
     try:
-        return p.communicate(*args, **kwargs)
+        return p.communicate(*args, **kwargs) # 자식 프로세스의 출력을 반환
     except BaseException:  # Including KeyboardInterrupt
         p.kill()
         p.wait()
@@ -2260,11 +2260,11 @@ def encodeFilename(s, for_subprocess=False):
     @param s The name of the file
     """
 
-    assert type(s) == compat_str
+    assert type(s) == compat_str # 파일 명이 문자열이 아니면 예외 발생
 
     # Python 3 has a Unicode API
-    if sys.version_info >= (3, 0):
-        return s
+    if sys.version_info >= (3, 0): 
+        return s 
 
     # Pass '' directly to use Unicode APIs on Windows 2000 and up
     # (Detecting Windows NT 4 is tricky because 'major >= 4' would
@@ -2281,7 +2281,7 @@ def encodeFilename(s, for_subprocess=False):
 
 def decodeFilename(b, for_subprocess=False):
 
-    if sys.version_info >= (3, 0):
+    if sys.version_info >= (3, 0): 
         return b
 
     if not isinstance(b, bytes):
@@ -3102,16 +3102,16 @@ def unified_timestamp(date_str, day_first=True):
 
 
 def determine_ext(url, default_ext='unknown_video'):
-    if url is None or '.' not in url:
+    if url is None or '.' not in url: # url이 잘못되면 반환
         return default_ext
-    guess = url.partition('?')[0].rpartition('.')[2]
-    if re.match(r'^[A-Za-z0-9]+$', guess):
+    guess = url.partition('?')[0].rpartition('.')[2] # 밑에 것 기준으로 mp4
+    if re.match(r'^[A-Za-z0-9]+$', guess): # guess 가 정규식에 부합하면 guess 반환
         return guess
     # Try extract ext from URLs like http://example.com/foo/bar.mp4/?download
-    elif guess.rstrip('/') in KNOWN_EXTENSIONS:
+    elif guess.rstrip('/') in KNOWN_EXTENSIONS: # KNOWN_EXTENSIONS에 guess.rstrip('/')이 있으면 그거 반환
         return guess.rstrip('/')
     else:
-        return default_ext
+        return default_ext 
 
 
 def subtitles_filename(filename, sub_lang, sub_format, expected_real_ext=None):
@@ -3198,7 +3198,7 @@ def platform_name():
     return res
 
 
-def _windows_write_string(s, out):
+def _windows_write_string(s, out): # 특수 메서드로 작성되면 true, 아니면 false
     """ Returns True if the string was written using special methods,
     False if it has yet to be written out."""
     # Adapted from http://stackoverflow.com/a/3259271/35070
@@ -3212,7 +3212,7 @@ def _windows_write_string(s, out):
     }
 
     try:
-        fileno = out.fileno()
+        fileno = out.fileno() # 스트림의 파일 설명자를 숫자로 반환
     except AttributeError:
         # If the output stream doesn't have a fileno, it's virtual
         return False
@@ -3273,26 +3273,26 @@ def _windows_write_string(s, out):
     return True
 
 
-def write_string(s, out=None, encoding=None):
+def write_string(s, out=None, encoding=None): # s나 out을 적는다
     if out is None:
-        out = sys.stderr
-    assert type(s) == compat_str
+        out = sys.stderr # 표준 에러 발생
+    assert type(s) == compat_str # 이게 참이 아니면 예외 발생
 
     if sys.platform == 'win32' and encoding is None and hasattr(out, 'fileno'):
-        if _windows_write_string(s, out):
+        if _windows_write_string(s, out): # 특수 메서드로 작성되면 함수를 빠져나옴
             return
 
-    if ('b' in getattr(out, 'mode', '')
+    if ('b' in getattr(out, 'mode', '') # 기본값이 ''인 out.mode를 가져와 b에 넣거나
             or sys.version_info[0] < 3):  # Python 2 lies about mode of sys.stderr
-        byt = s.encode(encoding or preferredencoding(), 'ignore')
-        out.write(byt)
-    elif hasattr(out, 'buffer'):
-        enc = encoding or getattr(out, 'encoding', None) or preferredencoding()
+        byt = s.encode(encoding or preferredencoding(), 'ignore') 
+        out.write(byt) # byt를 파일에 적음
+    elif hasattr(out, 'buffer'): # out에 buffer 가 있을 경우
+        enc = encoding or getattr(out, 'encoding', None) or preferredencoding() 
         byt = s.encode(enc, 'ignore')
-        out.buffer.write(byt)
+        out.buffer.write(byt) # byt를 버퍼로 파일에 적음
     else:
-        out.write(s)
-    out.flush()
+        out.write(s) # 파일에 s를 적음
+    out.flush() # 파일을 마저 적음
 
 
 def bytes_to_intlist(bs):
@@ -3452,20 +3452,20 @@ def unsmuggle_url(smug_url, default=None):
 
 
 def format_bytes(bytes):
-    if bytes is None:
+    if bytes is None: # 파라매터가 없으면 'N/A' 반환
         return 'N/A'
-    if type(bytes) is str:
+    if type(bytes) is str: # 문자열이면 float 형으로 바꿔서
         bytes = float(bytes)
-    if bytes == 0.0:
+    if bytes == 0.0: # 0.0이면 exponent는 0
         exponent = 0
     else:
-        exponent = int(math.log(bytes, 1024.0))
+        exponent = int(math.log(bytes, 1024.0)) # log(1024.0)bytes
     suffix = ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'][exponent]
     converted = float(bytes) / float(1024 ** exponent)
     return '%.2f%s' % (converted, suffix)
 
 
-def lookup_unit_table(unit_table, s):
+def lookup_unit_table(unit_table, s): # 
     units_re = '|'.join(re.escape(u) for u in unit_table)
     m = re.match(
         r'(?P<num>[0-9]+(?:[,.][0-9]*)?)\s*(?P<unit>%s)\b' % units_re, s)
@@ -3473,7 +3473,7 @@ def lookup_unit_table(unit_table, s):
         return None
     num_str = m.group('num').replace(',', '.')
     mult = unit_table[m.group('unit')]
-    return int(float(num_str) * mult)
+    return int(float(num_str) * mult) 
 
 
 def parse_filesize(s):
@@ -3632,7 +3632,7 @@ def setproctitle(title):
 
     # ctypes in Jython is not complete
     # http://bugs.jython.org/issue2148
-    if sys.platform.startswith('java'):
+    if sys.platform.startswith('java'): # java로 시작하면 함수 종료
         return
 
     try:
@@ -3671,8 +3671,8 @@ def remove_quotes(s):
 
 
 def url_basename(url):
-    path = compat_urlparse.urlparse(url).path
-    return path.strip('/').split('/')[-1]
+    path = compat_urlparse.urlparse(url).path # url을 파싱한 것의 경로
+    return path.strip('/').split('/')[-1] # url의 마지막 부분
 
 
 def base_url(url):
@@ -3812,7 +3812,7 @@ def parse_duration(s):
 
 
 def prepend_extension(filename, ext, expected_real_ext=None):
-    name, real_ext = os.path.splitext(filename)
+    name, real_ext = os.path.splitext(filename) # 파일의 확장자와 이름을 분리
     return (
         '{0}.{1}{2}'.format(name, ext, real_ext)
         if not expected_real_ext or real_ext[1:] == expected_real_ext
@@ -3883,8 +3883,8 @@ class OnDemandPagedList(PagedList):
 
     def getslice(self, start=0, end=None):
         res = []
-        for pagenum in itertools.count(start // self._pagesize):
-            firstid = pagenum * self._pagesize
+        for pagenum in itertools.count(start // self._pagesize): # start // self.pagesize 값으로 카운트한 리스트
+            firstid = pagenum * self._pagesize 
             nextfirstid = pagenum * self._pagesize + self._pagesize
             if start >= nextfirstid:
                 continue
@@ -4129,7 +4129,7 @@ def merge_dicts(*dicts):
     return merged
 
 
-def encode_compat_str(string, encoding=preferredencoding(), errors='strict'):
+def encode_compat_str(string, encoding=preferredencoding(), errors='strict'): # compat_str 인코딩
     return string if isinstance(string, compat_str) else compat_str(string, encoding, errors)
 
 
@@ -4265,7 +4265,7 @@ def ytdl_is_updateable():
 
 def args_to_str(args):
     # Get a short string representation for a subprocess command
-    return ' '.join(compat_shlex_quote(a) for a in args)
+    return ' '.join(compat_shlex_quote(a) for a in args) 
 
 
 def error_to_compat_str(err):
@@ -4364,7 +4364,7 @@ def encode_data_uri(data, mime_type):
     return 'data:%s;base64,%s' % (mime_type, base64.b64encode(data).decode('ascii'))
 
 
-def age_restricted(content_limit, age_limit):
+def age_restricted(content_limit, age_limit): # 연령 제한 함수
     """ Returns True iff the content should be blocked """
 
     if age_limit is None:  # No limit set
@@ -4394,26 +4394,26 @@ def is_html(first_bytes):
     return re.match(r'^\s*<', s)
 
 
-def determine_protocol(info_dict):
+def determine_protocol(info_dict): # 파일형 반환
     protocol = info_dict.get('protocol')
-    if protocol is not None:
+    if protocol is not None: # protocol 변수가 get 되면 반환
         return protocol
 
-    url = info_dict['url']
-    if url.startswith('rtmp'):
+    url = info_dict['url'] # url에 다음 문자들이 있으면 문자 반환
+    if url.startswith('rtmp'): 
         return 'rtmp'
     elif url.startswith('mms'):
         return 'mms'
     elif url.startswith('rtsp'):
         return 'rtsp'
 
-    ext = determine_ext(url)
+    ext = determine_ext(url) # mp4 같은 것
     if ext == 'm3u8':
         return 'm3u8'
     elif ext == 'f4m':
         return 'f4m'
 
-    return compat_urllib_parse_urlparse(url).scheme
+    return compat_urllib_parse_urlparse(url).scheme # url의 통신 프로토콜 반환
 
 
 def render_table(header_row, data):

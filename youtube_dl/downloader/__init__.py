@@ -5,18 +5,18 @@ from ..utils import (
 )
 
 
-def get_suitable_downloader(info_dict, params={}):
-    info_dict['protocol'] = determine_protocol(info_dict)
-    info_copy = info_dict.copy()
-    return _get_suitable_downloader(info_copy, params)
+def get_suitable_downloader(info_dict, params={}): 
+    info_dict['protocol'] = determine_protocol(info_dict) # info_dict의 파일형 반환
+    info_copy = info_dict.copy() # 복사
+    return _get_suitable_downloader(info_copy, params) 
 
 
 # Some of these require get_suitable_downloader
-from .common import FileDownloader
+from .common import FileDownloader 
 from .dash import DashSegmentsFD
 from .f4m import F4mFD
 from .hls import HlsFD
-from .http import HttpFD
+from .http import HttpFD 
 from .rtmp import RtmpFD
 from .rtsp import RtspFD
 from .ism import IsmFD
@@ -64,7 +64,7 @@ def _get_suitable_downloader(info_dict, params={}):
     if protocol == 'm3u8_native' and params.get('hls_prefer_native') is False:
         return FFmpegFD
 
-    return PROTOCOL_MAP.get(protocol, HttpFD)
+    return PROTOCOL_MAP.get(protocol, HttpFD) 
 
 
 __all__ = [

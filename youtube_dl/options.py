@@ -1,26 +1,26 @@
 from __future__ import unicode_literals
 
-import os.path
-import optparse
-import re
-import sys
+import os.path # 경로명을 다룸
+import optparse # 명령 줄 옵션을 구문 분석하기 위한 모듈
+import re # 정규표현식 모듈 
+import sys # 파이썬 인터프리터가 제공하는 변수와 함수를 직접 제어할 수 있게 해주는 모듈
 
-from .downloader.external import list_external_downloaders
+from .downloader.external import list_external_downloaders # 
 from .compat import (
-    compat_expanduser,
-    compat_get_terminal_size,
-    compat_getenv,
-    compat_kwargs,
-    compat_shlex_split,
+    compat_expanduser, # 홈 디렉토리의 절대경로로 대체
+    compat_get_terminal_size, # 터미널 창의 크기
+    compat_getenv, # 환경변수
+    compat_kwargs, # kwargs.items의 (바이트 값, 값)의 딕셔너리를 반환
+    compat_shlex_split, # 변수에 대입된 shlex.split 메소드를 의미
 )
 from .utils import (
-    preferredencoding,
-    write_string,
+    preferredencoding, # 사용자 환경 설정에 따라 텍스트 데이터에 사용되는 인코딩 방식
+    write_string, # 
 )
-from .version import __version__
+from .version import __version__ # version을 가져온다
 
 
-def _hide_login_info(opts):
+def _hide_login_info(opts): # 옵션이 private_opts일 경우 그 다음 옵션을 private로 한다
     PRIVATE_OPTS = set(['-p', '--password', '-u', '--username', '--video-password', '--ap-password', '--ap-username'])
     eqre = re.compile('^(?P<key>' + ('|'.join(re.escape(po) for po in PRIVATE_OPTS)) + ')=.+$')
 
@@ -31,43 +31,44 @@ def _hide_login_info(opts):
         else:
             return o
 
-    opts = list(map(_scrub_eq, opts))
+    opts = list(map(_scrub_eq, opts)) # 위의 함수와 opts를 매핑한 리스트
     for idx, opt in enumerate(opts):
-        if opt in PRIVATE_OPTS and idx + 1 < len(opts):
-            opts[idx + 1] = 'PRIVATE'
+        if opt in PRIVATE_OPTS and idx + 1 < len(opts): # opt가 PRI~ 에 있는 값이거나 idx + 1이 opt 길이보다 작을 때
+            opts[idx + 1] = 'PRIVATE' 
     return opts
 
 
-def parseOpts(overrideArguments=None):
-    def _readOptions(filename_bytes, default=[]):
+def parseOpts(overrideArguments=None): # opts(옵션들)을 분석하는 메소드
+    def _readOptions(filename_bytes, default=[]): # 옵션을 읽고 디코딩된 filename_bytes를 분할한 것을 모은 것을 반환하는 메소드
         try:
-            optionf = open(filename_bytes)
+            optionf = open(filename_bytes) # filename_bytes 파일을 연다
         except IOError:
             return default  # silently skip if file is not present
         try:
+            ''''''
             # FIXME: https://github.com/ytdl-org/youtube-dl/commit/dfe5fa49aed02cf36ba9f743b11b0903554b5e56
-            contents = optionf.read()
-            if sys.version_info < (3,):
-                contents = contents.decode(preferredencoding())
-            res = compat_shlex_split(contents, comments=True)
+            contents = optionf.read() # optionf를 읽는다
+            if sys.version_info < (3,): # 파이썬 2이면
+                contents = contents.decode(preferredencoding()) # contents를 환경설정에 따른 인코딩 방식으로 디코딩한다 
+            res = compat_shlex_split(contents, comments=True) # contents를 큰따옴표로 묶은 부분을 하나의 단어로 취급헤서 분할
         finally:
             optionf.close()
-        return res
+        return res 
 
-    def _readUserConf():
-        xdg_config_home = compat_getenv('XDG_CONFIG_HOME')
-        if xdg_config_home:
-            userConfFile = os.path.join(xdg_config_home, 'youtube-dl', 'config')
-            if not os.path.isfile(userConfFile):
-                userConfFile = os.path.join(xdg_config_home, 'youtube-dl.conf')
+    def _readUserConf(): # 유저 구성파일을 만듦
+        xdg_config_home = compat_getenv('XDG_CONFIG_HOME') # 환경변수
+        if xdg_config_home: # xdg~가 null이 아니면
+            userConfFile = os.path.join(xdg_config_home, 'youtube-dl', 'config') # 경로 저장
+            if not os.path.isfile(userConfFile): # 파일이 없으면
+                userConfFile = os.path.join(xdg_config_home, 'youtube-dl.conf') # 새로 만듦
         else:
-            userConfFile = os.path.join(compat_expanduser('~'), '.config', 'youtube-dl', 'config')
+            userConfFile = os.path.join(compat_expanduser('~'), '.config', 'youtube-dl', 'config') 
             if not os.path.isfile(userConfFile):
                 userConfFile = os.path.join(compat_expanduser('~'), '.config', 'youtube-dl.conf')
-        userConf = _readOptions(userConfFile, None)
+        userConf = _readOptions(userConfFile, None) # 해당 파일을 분할한 것 (쌍따옴표까지 포함한 문자)
 
         if userConf is None:
-            appdata_dir = compat_getenv('appdata')
+            appdata_dir = compat_getenv('appdata') # appdata 환경변수를 가져옴
             if appdata_dir:
                 userConf = _readOptions(
                     os.path.join(appdata_dir, 'youtube-dl', 'config'),
@@ -75,38 +76,38 @@ def parseOpts(overrideArguments=None):
                 if userConf is None:
                     userConf = _readOptions(
                         os.path.join(appdata_dir, 'youtube-dl', 'config.txt'),
-                        default=None)
+                        default=None) # 해당 파일을 분할한 것 (쌍따옴표까지 포함한 문자)
 
-        if userConf is None:
+        if userConf is None: # 이게 또 none이면
             userConf = _readOptions(
                 os.path.join(compat_expanduser('~'), 'youtube-dl.conf'),
                 default=None)
         if userConf is None:
             userConf = _readOptions(
                 os.path.join(compat_expanduser('~'), 'youtube-dl.conf.txt'),
-                default=None)
+                default=None) # 해당파일을 분할한 것
 
-        if userConf is None:
+        if userConf is None: 
             userConf = []
 
         return userConf
 
-    def _format_option_string(option):
+    def _format_option_string(option): # 옵션 문자열을 포맷
         ''' ('-o', '--option') -> -o, --format METAVAR'''
 
-        opts = []
+        opts = [] # opts를 리스트로
 
-        if option._short_opts:
-            opts.append(option._short_opts[0])
-        if option._long_opts:
+        if option._short_opts: # 예를 들면 -o
+            opts.append(option._short_opts[0]) 
+        if option._long_opts: # 예를 들면 --option
             opts.append(option._long_opts[0])
         if len(opts) > 1:
-            opts.insert(1, ', ')
+            opts.insert(1, ', ') 
 
-        if option.takes_value():
-            opts.append(' %s' % option.metavar)
+        if option.takes_value(): 
+            opts.append(' %s' % option.metavar) 
 
-        return ''.join(opts)
+        return ''.join(opts) # opts 리스트를 띄어쓰기 없이 문자열로 바꿈 
 
     def _comma_separated_values_options_callback(option, opt_str, value, parser):
         setattr(parser.values, option.dest, value.split(','))
@@ -126,9 +127,10 @@ def parseOpts(overrideArguments=None):
         'conflict_handler': 'resolve',
     }
 
-    parser = optparse.OptionParser(**compat_kwargs(kw))
+    parser = optparse.OptionParser(**compat_kwargs(kw)) # 옵션파싱을 해서 딕셔너리에 저장하도록 함
 
-    general = optparse.OptionGroup(parser, 'General Options')
+    general = optparse.OptionGroup(parser, 'General Options') # 일반 옵션 그룹
+    # 여기서부터
     general.add_option(
         '-h', '--help',
         action='help',
@@ -199,7 +201,7 @@ def parseOpts(overrideArguments=None):
         default=False,
         help='Do not emit color codes in output')
 
-    network = optparse.OptionGroup(parser, 'Network Options')
+    network = optparse.OptionGroup(parser, 'Network Options') # 네트워크 옵션
     network.add_option(
         '--proxy', dest='proxy',
         default=None, metavar='URL',
@@ -227,7 +229,7 @@ def parseOpts(overrideArguments=None):
         help='Make all connections via IPv6',
     )
 
-    geo = optparse.OptionGroup(parser, 'Geo Restriction')
+    geo = optparse.OptionGroup(parser, 'Geo Restriction') # 지역 제한 옵션
     geo.add_option(
         '--geo-verification-proxy',
         dest='geo_verification_proxy', default=None, metavar='URL',
@@ -254,7 +256,7 @@ def parseOpts(overrideArguments=None):
         dest='geo_bypass_ip_block', default=None,
         help='Force bypass geographic restriction with explicitly provided IP block in CIDR notation')
 
-    selection = optparse.OptionGroup(parser, 'Video Selection')
+    selection = optparse.OptionGroup(parser, 'Video Selection') # 비디오 선택 옵션
     selection.add_option(
         '--playlist-start',
         dest='playliststart', metavar='NUMBER', default=1, type=int,
@@ -349,7 +351,7 @@ def parseOpts(overrideArguments=None):
         dest='include_ads', action='store_true',
         help='Download advertisements as well (experimental)')
 
-    authentication = optparse.OptionGroup(parser, 'Authentication Options')
+    authentication = optparse.OptionGroup(parser, 'Authentication Options') # 유저 입증 옵션
     authentication.add_option(
         '-u', '--username',
         dest='username', metavar='USERNAME',
@@ -371,7 +373,7 @@ def parseOpts(overrideArguments=None):
         dest='videopassword', metavar='PASSWORD',
         help='Video password (vimeo, youku)')
 
-    adobe_pass = optparse.OptionGroup(parser, 'Adobe Pass Options')
+    adobe_pass = optparse.OptionGroup(parser, 'Adobe Pass Options') # swf 관련 옵션
     adobe_pass.add_option(
         '--ap-mso',
         dest='ap_mso', metavar='MSO',
@@ -389,7 +391,7 @@ def parseOpts(overrideArguments=None):
         action='store_true', dest='ap_list_mso', default=False,
         help='List all supported multiple-system operators')
 
-    video_format = optparse.OptionGroup(parser, 'Video Format Options')
+    video_format = optparse.OptionGroup(parser, 'Video Format Options') # 비디오 형식 옵션
     video_format.add_option(
         '-f', '--format',
         action='store', dest='format', metavar='FORMAT', default=None,
@@ -422,7 +424,7 @@ def parseOpts(overrideArguments=None):
             'output to given container format. One of mkv, mp4, ogg, webm, flv. '
             'Ignored if no merge is required'))
 
-    subtitles = optparse.OptionGroup(parser, 'Subtitle Options')
+    subtitles = optparse.OptionGroup(parser, 'Subtitle Options') # 자막 옵션
     subtitles.add_option(
         '--write-sub', '--write-srt',
         action='store_true', dest='writesubtitles', default=False,
@@ -449,7 +451,7 @@ def parseOpts(overrideArguments=None):
         default=[], callback=_comma_separated_values_options_callback,
         help='Languages of the subtitles to download (optional) separated by commas, use --list-subs for available language tags')
 
-    downloader = optparse.OptionGroup(parser, 'Download Options')
+    downloader = optparse.OptionGroup(parser, 'Download Options') # 다운로드 옵션
     downloader.add_option(
         '-r', '--limit-rate', '--rate-limit',
         dest='ratelimit', metavar='RATE',
@@ -526,7 +528,7 @@ def parseOpts(overrideArguments=None):
         dest='external_downloader_args', metavar='ARGS',
         help='Give these arguments to the external downloader')
 
-    workarounds = optparse.OptionGroup(parser, 'Workarounds')
+    workarounds = optparse.OptionGroup(parser, 'Workarounds') # 문제 발생 시 해결 방법 옵션
     workarounds.add_option(
         '--encoding',
         dest='encoding', metavar='ENCODING',
@@ -573,7 +575,7 @@ def parseOpts(overrideArguments=None):
             '(maximum possible number of seconds to sleep). Must only be used '
             'along with --min-sleep-interval.'))
 
-    verbosity = optparse.OptionGroup(parser, 'Verbosity / Simulation Options')
+    verbosity = optparse.OptionGroup(parser, 'Verbosity / Simulation Options') # 로깅 관련 or 시뮬 옵션
     verbosity.add_option(
         '-q', '--quiet',
         action='store_true', dest='quiet', default=False,
@@ -676,7 +678,7 @@ def parseOpts(overrideArguments=None):
         dest='call_home', action='store_false', default=False,
         help='Do NOT contact the youtube-dl server for debugging')
 
-    filesystem = optparse.OptionGroup(parser, 'Filesystem Options')
+    filesystem = optparse.OptionGroup(parser, 'Filesystem Options') # 파일 시스템 옵션
     filesystem.add_option(
         '-a', '--batch-file',
         dest='batchfile', metavar='FILE',
@@ -768,7 +770,7 @@ def parseOpts(overrideArguments=None):
         action='store_true', dest='rm_cachedir',
         help='Delete all filesystem cache files')
 
-    thumbnail = optparse.OptionGroup(parser, 'Thumbnail Options')
+    thumbnail = optparse.OptionGroup(parser, 'Thumbnail Options') # 썸네일 옵션
     thumbnail.add_option(
         '--write-thumbnail',
         action='store_true', dest='writethumbnail', default=False,
@@ -782,20 +784,20 @@ def parseOpts(overrideArguments=None):
         action='store_true', dest='list_thumbnails', default=False,
         help='Simulate and list all available thumbnail formats')
 
-    postproc = optparse.OptionGroup(parser, 'Post-processing Options')
+    postproc = optparse.OptionGroup(parser, 'Post-processing Options') 
     postproc.add_option(
-        '-x', '--extract-audio',
+        '-x', '--extract-audio', # 오디오 추출
         action='store_true', dest='extractaudio', default=False,
         help='Convert video files to audio-only files (requires ffmpeg/avconv and ffprobe/avprobe)')
-    postproc.add_option(
-        '--audio-format', metavar='FORMAT', dest='audioformat', default='best',
+    postproc.add_option( 
+        '--audio-format', metavar='FORMAT', dest='audioformat', default='best', # 오디오 형식
         help='Specify audio format: "best", "aac", "flac", "mp3", "m4a", "opus", "vorbis", or "wav"; "%default" by default; No effect without -x')
     postproc.add_option(
-        '--audio-quality', metavar='QUALITY',
+        '--audio-quality', metavar='QUALITY', # 오디오 음질
         dest='audioquality', default='5',
         help='Specify ffmpeg/avconv audio quality, insert a value between 0 (better) and 9 (worse) for VBR or a specific bitrate like 128K (default %default)')
     postproc.add_option(
-        '--recode-video',
+        '--recode-video', # 비디오 레코딩
         metavar='FORMAT', dest='recodevideo', default=None,
         help='Encode the video to another format if necessary (currently supported: mp4|flv|ogg|webm|mkv|avi)')
     postproc.add_option(
@@ -811,11 +813,11 @@ def parseOpts(overrideArguments=None):
         action='store_true', dest='nopostoverwrites', default=False,
         help='Do not overwrite post-processed files; the post-processed files are overwritten by default')
     postproc.add_option(
-        '--embed-subs',
+        '--embed-subs', # 자막 포함
         action='store_true', dest='embedsubtitles', default=False,
         help='Embed subtitles in the video (only for mp4, webm and mkv videos)')
     postproc.add_option(
-        '--embed-thumbnail',
+        '--embed-thumbnail', # 썸네일 포함
         action='store_true', dest='embedthumbnail', default=False,
         help='Embed thumbnail in the audio as cover art')
     postproc.add_option(
@@ -862,7 +864,7 @@ def parseOpts(overrideArguments=None):
         '--convert-subs', '--convert-subtitles',
         metavar='FORMAT', dest='convertsubtitles', default=None,
         help='Convert the subtitles to other format (currently supported: srt|ass|vtt|lrc)')
-
+    # 여기까지 옵션 추가 
     parser.add_option_group(general)
     parser.add_option_group(network)
     parser.add_option_group(geo)
@@ -877,44 +879,44 @@ def parseOpts(overrideArguments=None):
     parser.add_option_group(authentication)
     parser.add_option_group(adobe_pass)
     parser.add_option_group(postproc)
-
-    if overrideArguments is not None:
-        opts, args = parser.parse_args(overrideArguments)
+    # 위의 옵션 추가그룹들을 parser에 저장
+    if overrideArguments is not None: # 매개변수가 None이 아니면
+        opts, args = parser.parse_args(overrideArguments) # 매개변수를 파싱함 (파싱 == 구문해석)
         if opts.verbose:
-            write_string('[debug] Override config: ' + repr(overrideArguments) + '\n')
-    else:
+            write_string('[debug] Override config: ' + repr(overrideArguments) + '\n') # 큰 따옴표로 매개변수를 반환
+    else: # None일때
         def compat_conf(conf):
-            if sys.version_info < (3,):
+            if sys.version_info < (3,): # 파이썬 버전이 2일때
                 return [a.decode(preferredencoding(), 'replace') for a in conf]
             return conf
 
-        command_line_conf = compat_conf(sys.argv[1:])
-        opts, args = parser.parse_args(command_line_conf)
+        command_line_conf = compat_conf(sys.argv[1:]) # 명령 인자값 반환
+        opts, args = parser.parse_args(command_line_conf) # 명령 인자값을 해석(파싱)한 것을 반환받음
 
         system_conf = user_conf = custom_conf = []
 
-        if '--config-location' in command_line_conf:
-            location = compat_expanduser(opts.config_location)
-            if os.path.isdir(location):
-                location = os.path.join(location, 'youtube-dl.conf')
+        if '--config-location' in command_line_conf: # 명령을 받은 것이 구성파일 위치면
+            location = compat_expanduser(opts.config_location) # 구성 파일 위치를 홈 디렉토리의 절대경로로 대체함
+            if os.path.isdir(location): # 위치가 있을 경우
+                location = os.path.join(location, 'youtube-dl.conf') # 구성파일 생성
             if not os.path.exists(location):
-                parser.error('config-location %s does not exist.' % location)
-            custom_conf = _readOptions(location)
+                parser.error('config-location %s does not exist.' % location) # 없으니 에러
+            custom_conf = _readOptions(location) # 옵션을 읽고 디코딩된 location을 분할한 것을 모은 것을 반환
         elif '--ignore-config' in command_line_conf:
             pass
         else:
-            system_conf = _readOptions('/etc/youtube-dl.conf')
-            if '--ignore-config' not in system_conf:
-                user_conf = _readUserConf()
+            system_conf = _readOptions('/etc/youtube-dl.conf') # 옵션을 읽고 디코딩된 /etc/youtube-dl.conf을 분할한 것을 모은 것을 반환
+            if '--ignore-config' not in system_conf: 
+                user_conf = _readUserConf() # user_conf를 만듦
 
         argv = system_conf + user_conf + custom_conf + command_line_conf
         opts, args = parser.parse_args(argv)
-        if opts.verbose:
+        if opts.verbose: # 상세 정보가 있을 경우?
             for conf_label, conf in (
                     ('System config', system_conf),
                     ('User config', user_conf),
                     ('Custom config', custom_conf),
                     ('Command-line args', command_line_conf)):
-                write_string('[debug] %s: %s\n' % (conf_label, repr(_hide_login_info(conf))))
+                write_string('[debug] %s: %s\n' % (conf_label, repr(_hide_login_info(conf)))) # 디버그 '~ config' : 로그인 옵션인지를 검색한 결과를 파일에 입력
 
-    return parser, opts, args
+    return parser, opts, args # 옵션들을 반환
