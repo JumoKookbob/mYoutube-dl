@@ -13,7 +13,7 @@ if __package__ is None and not hasattr(sys, 'frozen'):
     path = os.path.realpath(os.path.abspath(__file__)) # 파일 상대경로 출력
     sys.path.insert(0, os.path.dirname(os.path.dirname(path)))
 
-import mjuYoutube_dl
+import youtube_dl
 
 if __name__ == '__main__':
-    mjuYoutube_dl.main() # 실행
+    youtube_dl.main() # 실행
